@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UpdateActivityView: View {
-    @StateObject var activity: Activity // sets up state on var activity to re-render on this change
+    @StateObject var activity: Activity
     
     @State private var activityTitle: String = ""
     @State private var activityDate: Date = Date()
@@ -38,20 +38,23 @@ struct UpdateActivityView: View {
                     }
                 }
                 HStack {
-                DatePicker(selection: $activityDate,
-                           in: Date()...,
-                           displayedComponents: .date,
-                           label: {Text("Choose Date")})
+                    DatePicker(selection: $activityDate,
+                               in: Date()...,
+                               displayedComponents: .date,
+                               label: {Text("Choose Date")})
                     Button(action: updateActivityDate) {
                         Text("Save")
                     }
                 }
                 
             }
-            }
-    
+            
+            // section selection button to import other activities
+            
+        }
+        
     }
-
+    
     private func updateActivityTitle() {
         withAnimation {
             activity.title = activityTitle
@@ -71,26 +74,27 @@ struct UpdateActivityView: View {
         }
     }
     
-//    private func dateFormatter() {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "MM dd, yyyy"
-//        return dateFormatter.string(from: activity.date)
-//    }
-
 }
 
 struct UpdateView_Previews: PreviewProvider {
     static var previews: some View {
-//        UpdateView()
         let viewContext =
-            PersistenceController.preview.container.viewContext
+        PersistenceController.preview.container.viewContext
         let newActivity = Activity(context: viewContext)
         newActivity.title = "Activity Title"
         newActivity.date = Date()
         
         return UpdateActivityView(activity: newActivity)
-                .environment(\.managedObjectContext,
-                    PersistenceController.preview.container.viewContext)
+            .environment(\.managedObjectContext,
+                          PersistenceController.preview.container.viewContext)
         
     }
 }
+
+// PARTY IN THE GRAVEYARD
+
+//    private func dateFormatter() {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "MM dd, yyyy"
+//        return dateFormatter.string(from: activity.date)
+//    }
