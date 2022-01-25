@@ -11,27 +11,60 @@ struct UpdateActivityView: View {
     @StateObject var activity: Activity // sets up state on var activity to re-render on this change
     
     @State private var activityTitle: String = ""
+    @State private var activityDate: Date = Date()
     
     var body: some View {
-        VStack {
-            HStack {
-                TextField("Update activity title", text: $activityTitle)
-                    .textFieldStyle(.roundedBorder)
-                Button(action: updateActivity) {
-                    Label("", systemImage: "arrowshape.turn.up.left") // sf symbols
+        
+        Form {
+            Section(header: Text("Update Title")) {
+                Text(activity.title ?? "")
+                HStack {
+                    TextField("New Title", text: $activityTitle)
+                        .textFieldStyle(.roundedBorder)
+                    Button(action: updateActivityTitle){
+                        Text("Save")
+                    }
                 }
-            }.padding()
-            Text(activity.title ?? "")
-            Spacer()
-        }
-    }
+            }
+            
+            
+            Section(header: Text("Select Date")) {
+                
+                //Text(DateFormatter() ?? "")
+                HStack {
+                DatePicker(selection: $activityDate,
+                           in: Date()...,
+                           displayedComponents: .date,
+                           label: {Text("Choose Date")})
+                    Button(action: updateActivityDate) {
+                        Text("Save")
+                    }
+                }
+                
+            }
+            }
     
-    private func updateActivity() {
+    }
+
+    private func updateActivityTitle() {
         withAnimation {
             activity.title = activityTitle
             PersistenceController.shared.saveContext()
         }
     }
+    private func updateActivityDate() {
+        withAnimation {
+            activity.date = activityDate
+            PersistenceController.shared.saveContext()
+        }
+    }
+    
+//    private func dateFormatter() {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "MM dd, yyyy"
+//        return dateFormatter.string(from: activity.date)
+//    }
+
 }
 
 struct UpdateView_Previews: PreviewProvider {
@@ -40,7 +73,8 @@ struct UpdateView_Previews: PreviewProvider {
         let viewContext =
             PersistenceController.preview.container.viewContext
         let newActivity = Activity(context: viewContext)
-        newActivity.title = "new title"
+        newActivity.title = "Activity Title"
+        newActivity.date = Date()
         
         return UpdateActivityView(activity: newActivity)
                 .environment(\.managedObjectContext,
