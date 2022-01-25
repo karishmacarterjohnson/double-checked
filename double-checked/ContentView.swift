@@ -12,34 +12,28 @@ struct ContentView: View {
     
     @State private var activityTitle: String = ""
     
-    @FetchRequest( // property wrapper
-        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // how to organize data
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
         animation: .default)
-    private var activities: FetchedResults<Activity> // sets up object in coredata repo for ui
+    private var activities: FetchedResults<Activity>
     
     var body: some View {
         NavigationView{
-            //Text("Hello, world!")
-            //.padding()
-            
-            VStack { // orders vertically
-                HStack { // horizontal stack of things in these brackets
+            VStack {
+                HStack {
                     TextField("Activity Name", text: $activityTitle)
                         .textFieldStyle(.roundedBorder)
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
-                }.padding()
-                //Spacer() // sends to top
+                }
                 List {
                     ForEach(activities) {activity in
-                        //Text (activity.title ?? "")
                         NavigationLink(destination: UpdateActivityView(activity: activity)) {
                             VStack {
                             Text(activity.title ?? "")
                             Text("<status bar here>")
                             }
-                            //Spacer()
                         }
                     }.onDelete(perform: deleteActivity) // swipe button
                 }.toolbar{ EditButton() }
@@ -54,7 +48,7 @@ struct ContentView: View {
         }
     }
     
-    private func addActivity() { // creates newActivity object and assigns title
+    private func addActivity() {
         withAnimation {
             let newActivity = Activity(context: viewContext)
             newActivity.title = activityTitle
@@ -66,7 +60,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        //        ContentView()
         ContentView().environment(\.managedObjectContext,
                                    PersistenceController.preview.container.viewContext)
     }
