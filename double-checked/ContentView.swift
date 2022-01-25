@@ -29,7 +29,7 @@ struct ContentView: View {
                 }
                 List {
                     ForEach(activities) {activity in
-                        NavigationLink(destination: UpdateActivityView(activity: activity)) {
+                        NavigationLink(destination: ReadActivityView(activity: activity)) {
                             VStack {
                             Text(activity.title ?? "")
                             Text("<status bar here>")
