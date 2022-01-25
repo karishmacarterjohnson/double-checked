@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Activity" representedClassName="Activity" syncable="YES" codeGenerationType="class">
+    <entity name="Activity" representedClassName="Activity" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="categories" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="activity" inverseEntity="Category"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="activity" inverseEntity="Category"/>
     </entity>
-    <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
+    <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="title" attributeType="String"/>
         <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="categories" inverseEntity="Activity"/>
-        <relationship name="items" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Item" inverseName="category" inverseEntity="Item"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="category" inverseEntity="Item"/>
     </entity>
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+    <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="check" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="items" inverseEntity="Category"/>
