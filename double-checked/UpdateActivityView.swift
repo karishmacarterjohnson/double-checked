@@ -31,7 +31,8 @@ struct UpdateActivityView: View {
             Section(header: Text("Select Date")) {
                 HStack {
                     // current date selection
-                    Text(activity.date?.addingTimeInterval(600) ?? Date(), style: .date)
+                    Text(activity.date ?? Date(), style: .date) // priv func format str
+                    // 
                     Spacer()
                     Button(action: clearDate) {
                         Text("Clear")
