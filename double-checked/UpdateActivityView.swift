@@ -29,8 +29,14 @@ struct UpdateActivityView: View {
             
             
             Section(header: Text("Select Date")) {
-                
-                //Text(DateFormatter() ?? "")
+                HStack {
+                    // current date selection
+                    Text(activity.date?.addingTimeInterval(600) ?? Date(), style: .date)
+                    Spacer()
+                    Button(action: clearDate) {
+                        Text("Clear")
+                    }
+                }
                 HStack {
                 DatePicker(selection: $activityDate,
                            in: Date()...,
@@ -55,6 +61,12 @@ struct UpdateActivityView: View {
     private func updateActivityDate() {
         withAnimation {
             activity.date = activityDate
+            PersistenceController.shared.saveContext()
+        }
+    }
+    private func clearDate() {
+        withAnimation {
+            activity.date = nil
             PersistenceController.shared.saveContext()
         }
     }
