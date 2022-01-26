@@ -110,3 +110,4 @@ struct ReadActivityView: View {
         }
     }
     
+}
