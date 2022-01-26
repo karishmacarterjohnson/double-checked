@@ -17,13 +17,17 @@ extension Item {
     }
 
     @NSManaged public var title: String?
+    @NSManaged public var activityTitle: String?
     @NSManaged public var check: Bool
-    @NSManaged public var category: Category?
+    @NSManaged public var activity: Activity?
     
     public var unwrappedTitle: String {
-        title ?? "Unknown title"
+        title ?? "Unknown Title"
     }
-
+    
+    public var unwrappedActivityTitle: String {
+        activityTitle ?? "Unknown Activity"
+    }
 }
 
 extension Item : Identifiable {

@@ -8,16 +8,14 @@
     <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="title" attributeType="String"/>
         <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="categories" inverseEntity="Activity"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="category" inverseEntity="Item"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="check" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="title" attributeType="String"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="items" inverseEntity="Category"/>
     </entity>
     <elements>
         <element name="Activity" positionX="-45" positionY="0" width="128" height="74"/>
-        <element name="Category" positionX="-9" positionY="54" width="128" height="74"/>
-        <element name="Item" positionX="18" positionY="90" width="128" height="74"/>
+        <element name="Category" positionX="-9" positionY="54" width="128" height="59"/>
+        <element name="Item" positionX="18" positionY="90" width="128" height="59"/>
     </elements>
 </model>

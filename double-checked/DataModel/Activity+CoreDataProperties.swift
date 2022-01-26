@@ -1,5 +1,5 @@
 //
-//  Category+CoreDataProperties.swift
+//  Activity+CoreDataProperties.swift
 //  double-checked
 //
 //  Created by Karishma Johnson on 1/25/22.
@@ -10,21 +10,19 @@ import Foundation
 import CoreData
 
 
-extension Category {
+extension Activity {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Category> {
-        return NSFetchRequest<Category>(entityName: "Category")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Activity> {
+        return NSFetchRequest<Activity>(entityName: "Activity")
     }
 
     @NSManaged public var title: String?
+    @NSManaged public var date: Date?
     @NSManaged public var items: NSSet?
-    @NSManaged public var activity: Activity?
     
-    public var unwrappedTitle: String { // unwrapped Category? // maybe as NSSet? NSDict? so I can get items from it as well
+    public var unwrappedTitle: String {
         title ?? "Unknown title"
     }
-    
-    //public var 
     
     public var itemsArray: [Item] {
         let itemSet = items as? Set<Item> ?? []
@@ -33,15 +31,11 @@ extension Category {
             $0.unwrappedTitle < $1.unwrappedTitle // sorts array alphabetically // do like this with the bool
         }
     }
-    
-    public var unwrappedActivity: String {
-        activity?.unwrappedTitle ?? "unknown activity"
-    }
 
 }
 
-// MARK: Generated accessors for items
-extension Category {
+// MARK: Generated accessors for relationship
+extension Activity {
 
     @objc(addItemsObject:)
     @NSManaged public func addToItems(_ value: Item)
@@ -57,6 +51,6 @@ extension Category {
 
 }
 
-extension Category : Identifiable {
+extension Activity : Identifiable {
 
 }
