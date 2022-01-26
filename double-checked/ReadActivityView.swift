@@ -16,12 +16,14 @@ struct ReadActivityView: View {
     var body: some View {
         VStack {
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
-                Text(activity.title ?? "")
+                Text(activity.title ?? "") // !! add > to indicate navigation
             }
             
+            // !! due date
+            // progress bar
             
             
-            List {
+            List { // group by unwrappedActivityTitle
                 ForEach(activity.itemsArray) { item in
                     HStack{
                         Text(item.unwrappedActivityTitle)
@@ -42,7 +44,8 @@ struct ReadActivityView: View {
             //
             //                }
             //            }
-            // drop-down to copy from a specific activity and all its items
+            
+            // !! drop-down to copy from a specific activity and all its items
             // copy items to current activity with newitem.activityTitle = activitySelected.title
             // newitem.title = item.title
             HStack {

@@ -20,19 +20,19 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             VStack {
-                HStack {
+                HStack { // !! move to bottom with spacing
                     TextField("Activity Name", text: $activityTitle)
                         .textFieldStyle(.roundedBorder)
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
                 }
-                List {
+                List { // !! group by date: today, upcoming, else.
                     ForEach(activities) {activity in
                         NavigationLink(destination: ReadActivityView(activity: activity)) {
                             VStack {
                             Text(activity.title ?? "")
-                            Text("<status bar here>")
+                            Text("<status bar here>") // progress bar
                             }
                         }
                     }.onDelete(perform: deleteActivity) // swipe button
