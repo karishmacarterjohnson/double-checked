@@ -13,6 +13,13 @@ struct ReadActivityView: View {
     @StateObject var activity: Activity
     @State private var itemTitle: String = ""
     
+//    @FetchRequest(
+//        sortDescriptors: [
+//            NSSortDescriptor(keyPath: \Item.title, ascending: true),
+//        ],
+//        predicate: NSPredicate(format: "unwrappedActivityTitle == %@", activity.unwrappedTitle))
+//                  var items: FetchedResults<Item>
+    
     var body: some View {
         VStack {
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
@@ -23,27 +30,45 @@ struct ReadActivityView: View {
             // progress bar
             
             
-            List { // group by unwrappedActivityTitle
-                ForEach(activity.itemsArray) { item in
-                    HStack{
-                        Text(item.unwrappedActivityTitle)
-                        Text(":")
-                        Text(item.unwrappedTitle)
-                        
-                    }
-                }.onDelete(perform: deleteItem)
-            }
+//            List { // group by unwrappedActivityTitle
+//                ForEach(activity.itemsArray) { item in
+//                    HStack{
+////                        Button(action: toggleCheck) {
+////                            Label("", systemImage: "plus") // edit systemImage!!
+////                        }
+//                        Text(item.unwrappedActivityTitle)
+//                        Text(":")
+//                        Text(item.unwrappedTitle)
+//                        Text(item.unwrappedCheck)
+//
+//                    }
+//                }.onDelete(perform: deleteItem)
+//            }
             
-            //            List {
-            //                ForEach(Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})){ activityName, items in
-            //                    Section(header: Text(activityName ?? "")){
-            //                        ForEach(items) { item in
-            //                            Text(item.unwrappedTitle)
-            //                        }.onDelete(perform: deleteItem)
-            //                    }
-            //
-            //                }
-            //            }
+            
+            
+            
+//            List {
+//                ForEach(groupItems, id:\.self) {group in
+//                    Section(header: Text(group.someObject)) {
+//                        ForEach(group.valueObjects) { item in
+//                            Text(item.unwrappedTitle)
+//
+//                        }
+//                    }
+//                }
+//            }
+            
+                        List {
+                            ForEach(groupItems(), id:\.self.0){ activityName, items in
+                                Section(header: Text(activityName ?? "")){
+                                    ForEach(items) { item in
+                                        Text(item.unwrappedTitle)
+                                    }.onDelete(perform: deleteItem)
+                                }
+            
+                            }
+                        }
             
             // !! drop-down to copy from a specific activity and all its items
             // copy items to current activity with newitem.activityTitle = activitySelected.title
@@ -58,6 +83,32 @@ struct ReadActivityView: View {
         }
     }
     
+    private func groupItems() -> [(String?,[Item])] {
+        let items: Dictionary = Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})
+        //let listItems = [ListItem]()
+        var listItems = [(String?,[Item])]()
+        var strs = items.keys.compactMap {
+            $0!
+        }
+        for key in strs.sorted() {
+            //listItems.append(ListItem(someObject: key, valueObjects: items[key]!))
+            listItems.append((key, items[key]!))
+        }
+        return listItems
+        
+    }
+    
+    private func toggleCheck(at offsets: IndexSet) {
+        withAnimation {
+            
+            for index in offsets {
+                let item = activity.itemsArray[index]
+                item.check = !item.check
+
+            }
+            PersistenceController.shared.saveContext()
+        }
+    }
     
     private func addItem() {
         withAnimation {
@@ -78,6 +129,24 @@ struct ReadActivityView: View {
             }
         }
     }
+    
+//    private func groupItems() {
+//
+//        struct ListItem {
+//            let someObject: String
+//            let valueObjects: [Item]
+//        }
+//
+//        let items: Dictionary = Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})
+//        let listItems = [ListItem]()
+//
+//        for key in items.keys.sorted() {
+//            listItems.append(ListItem(someObject: key, valueObjects: items[key]!))
+//        }
+//
+//        return listItems
+//
+//    }
 }
 
 
