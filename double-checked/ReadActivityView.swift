@@ -23,23 +23,27 @@ struct ReadActivityView: View {
                 }
             }.padding()
             
-                        List {
-                            ForEach(activity.itemsArray) { item in
-                                Text(item.unwrappedTitle)
-                                Text(item.unwrappedActivityTitle)
-                            }.onDelete(perform: deleteItem)
-                        }
+            List {
+                ForEach(activity.itemsArray) { item in
+                    HStack{
+                        Text(item.unwrappedActivityTitle)
+                        Text(":")
+                        Text(item.unwrappedTitle)
+                        
+                    }
+                }.onDelete(perform: deleteItem)
+            }
             
-//            List {
-//                ForEach(Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})){ activityName, items in
-//                    Section(header: Text(activityName ?? "")){
-//                        ForEach(items) { item in
-//                            Text(item.unwrappedTitle)
-//                        }.onDelete(perform: deleteItem)
-//                    }
-//
-//                }
-//            }
+            //            List {
+            //                ForEach(Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})){ activityName, items in
+            //                    Section(header: Text(activityName ?? "")){
+            //                        ForEach(items) { item in
+            //                            Text(item.unwrappedTitle)
+            //                        }.onDelete(perform: deleteItem)
+            //                    }
+            //
+            //                }
+            //            }
             // drop-down to copy from a specific activity and all its items
             // copy items to current activity with newitem.activityTitle = activitySelected.title
             // newitem.title = item.title
