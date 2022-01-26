@@ -28,6 +28,16 @@ extension Item {
     public var unwrappedActivityTitle: String {
         activityTitle ?? "Unknown Activity"
     }
+    
+    // temporary!!
+    public var unwrappedCheck: String {
+        if check {
+            return "True"
+        } else {
+            return "False"
+        }
+    }
+    
 }
 
 extension Item : Identifiable {
