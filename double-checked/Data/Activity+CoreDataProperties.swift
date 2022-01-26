@@ -29,11 +29,11 @@ extension Activity {
     
     public var categoriesArray: [Category] {
         let categorySet = categories as? Set<Category> ?? []
-        
+        // also send children?
         return categorySet.sorted {
             $0.unwrappedTitle < $1.unwrappedTitle // sorts array alphabetically // do like this with the bool
         }
-    }
+    }    
 
 }
 

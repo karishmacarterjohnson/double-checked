@@ -11,36 +11,43 @@ struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var activity: Activity
-    //@StateObject var categories: Activity.categories
     
     @State private var categoryTitle: String = ""
-    //@State private var itemTitle: String = ""
     
+    // fetch request categories where activity == activity
+
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Category.title, ascending: true)],
+                  predicate: NSPredicate(format: "activity == %@", "visit gf"))
+    private var categories: FetchedResults<Category>
     
     var body: some View {
         VStack {
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
                 Text(activity.title ?? "")
             }
-            //            HStack {
-            //                TextField("new item", text: $itemTitle)
-            //                    .textFieldStyle(.roundedBorder)
-            //                Button(action: addItem) {
-            //                    Label("", systemImage:"plus")
-            //                }
-            //            }
+//                        HStack {
+//                            TextField("new item", text: $itemTitle)
+//                                .textFieldStyle(.roundedBorder)
+//                            Button(action: addItem) {
+//                                Label("", systemImage:"plus")
+//                            }
+//                        }
             
+            // list
+            // for each category,
+            // display tasks
             List {
-                ForEach(activity.categoriesArray) { category in
-//                    NavigationLink(destination: UpdateCategoryView(category: category.unwrappedTitle, )) {
-                    Text(category.unwrappedTitle)
-                    //                    }
-                    
+                ForEach(categories) { category in
+                    Section(header: Text(category.unwrappedTitle)){
+//                        Text("a category!")
+//                        ForEach(category, id: \.self){ item in
+//                            Text(item.unwrappedTitle)
+//                        }
+                    }
                 }
             }
-            
         }
-    }//.navigationTitle("Activity name here")
+    }
     
     
 }
@@ -143,3 +150,14 @@ struct ReadActivityView_Previews: PreviewProvider {
 //            }
 //        }
 //    }
+
+
+
+//List {
+//    ForEach(activity.categoriesArray) { category in
+////                    NavigationLink(destination: UpdateCategoryView(category: category.unwrappedTitle, )) {
+//        Text(category.unwrappedTitle)
+//        //                    }
+//
+//    }
+//}

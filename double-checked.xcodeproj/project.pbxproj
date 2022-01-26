@@ -22,7 +22,6 @@
 		6E3BC92827A085B80098A4F7 /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC92227A085B80098A4F7 /* Item+CoreDataProperties.swift */; };
 		6E3BC92927A085B80098A4F7 /* Activity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC92327A085B80098A4F7 /* Activity+CoreDataClass.swift */; };
 		6E3BC92A27A085B80098A4F7 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC92427A085B80098A4F7 /* Activity+CoreDataProperties.swift */; };
-		6E3BC92F27A0B4240098A4F7 /* UpdateCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC92E27A0B4240098A4F7 /* UpdateCategoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +41,6 @@
 		6E3BC92227A085B80098A4F7 /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Item+CoreDataProperties.swift"; path = "double-checked/Data/Item+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		6E3BC92327A085B80098A4F7 /* Activity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Activity+CoreDataClass.swift"; path = "double-checked/Data/Activity+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		6E3BC92427A085B80098A4F7 /* Activity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Activity+CoreDataProperties.swift"; path = "double-checked/Data/Activity+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
-		6E3BC92E27A0B4240098A4F7 /* UpdateCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCategoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +79,6 @@
 				6E3BC911279F5E110098A4F7 /* CreateActivityView.swift */,
 				6E3BC90D279F5A7C0098A4F7 /* UpdateActivityView.swift */,
 				6E3BC913279F5E290098A4F7 /* ReadActivityView.swift */,
-				6E3BC92E27A0B4240098A4F7 /* UpdateCategoryView.swift */,
 				6E3BC8FA279F4EE40098A4F7 /* ContentView.swift */,
 				6E3BC90F279F5AAF0098A4F7 /* PersistenceController.swift */,
 				6E3BC8FC279F4EEC0098A4F7 /* Assets.xcassets */,
@@ -192,7 +189,6 @@
 				6E3BC92727A085B80098A4F7 /* Item+CoreDataClass.swift in Sources */,
 				6E3BC914279F5E290098A4F7 /* ReadActivityView.swift in Sources */,
 				6E3BC92627A085B80098A4F7 /* Category+CoreDataProperties.swift in Sources */,
-				6E3BC92F27A0B4240098A4F7 /* UpdateCategoryView.swift in Sources */,
 				6E3BC92A27A085B80098A4F7 /* Activity+CoreDataProperties.swift in Sources */,
 				6E3BC92527A085B80098A4F7 /* Category+CoreDataClass.swift in Sources */,
 				6E3BC92927A085B80098A4F7 /* Activity+CoreDataClass.swift in Sources */,

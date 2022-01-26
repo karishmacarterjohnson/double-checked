@@ -20,9 +20,11 @@ extension Category {
     @NSManaged public var items: NSSet?
     @NSManaged public var activity: Activity?
     
-    public var unwrappedTitle: String {
+    public var unwrappedTitle: String { // unwrapped Category? // maybe as NSSet? NSDict? so I can get items from it as well
         title ?? "Unknown title"
     }
+    
+    //public var 
     
     public var itemsArray: [Item] {
         let itemSet = items as? Set<Item> ?? []
@@ -30,6 +32,10 @@ extension Category {
         return itemSet.sorted {
             $0.unwrappedTitle < $1.unwrappedTitle // sorts array alphabetically // do like this with the bool
         }
+    }
+    
+    public var unwrappedActivity: String {
+        activity?.unwrappedTitle ?? "unknown activity"
     }
 
 }
