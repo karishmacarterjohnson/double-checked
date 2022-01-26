@@ -13,7 +13,6 @@ struct ReadActivityView: View {
     @StateObject var activity: Activity
     @State private var itemTitle: String = ""
     
-
     var body: some View {
         VStack {
             HStack {
@@ -24,14 +23,29 @@ struct ReadActivityView: View {
                 }
             }.padding()
             
-            List {
-                ForEach(activity.itemsArray) { item in
-                    Text(item.unwrappedTitle)
-                    //Text(item.unwrappedActivityTitle)
-                }.onDelete(perform: deleteItem)
-            }
+                        List {
+                            ForEach(activity.itemsArray) { item in
+                                Text(item.unwrappedTitle)
+                                Text(item.unwrappedActivityTitle)
+                            }.onDelete(perform: deleteItem)
+                        }
+            
+//            List {
+//                ForEach(Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})){ activityName, items in
+//                    Section(header: Text(activityName ?? "")){
+//                        ForEach(items) { item in
+//                            Text(item.unwrappedTitle)
+//                        }.onDelete(perform: deleteItem)
+//                    }
+//
+//                }
+//            }
+            // drop-down to copy from a specific activity and all its items
+            // copy items to current activity with newitem.activityTitle = activitySelected.title
+            // newitem.title = item.title
         }
     }
+    
     
     private func addItem() {
         withAnimation {
@@ -52,9 +66,9 @@ struct ReadActivityView: View {
             }
         }
     }
-
-    
 }
+
+
 
 
 struct ReadActivityView_Previews: PreviewProvider {
@@ -67,7 +81,7 @@ struct ReadActivityView_Previews: PreviewProvider {
         let item1 = Item(context: viewContext)
         item1.title = "1 item"
         item1.activityTitle = "group"
-                
+        
         newActivity.addToItems(item1)
         
         return ReadActivityView(activity: newActivity)
@@ -75,3 +89,4 @@ struct ReadActivityView_Previews: PreviewProvider {
                           PersistenceController.preview.container.viewContext)
     }
 }
+
