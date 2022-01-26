@@ -15,6 +15,10 @@ struct ReadActivityView: View {
     
     var body: some View {
         VStack {
+            NavigationLink(destination: UpdateActivityView(activity: activity)) {
+                Text(activity.title ?? "")
+            }
+            
             HStack {
                 TextField("Item title", text: $itemTitle)
                     .textFieldStyle(.roundedBorder)
