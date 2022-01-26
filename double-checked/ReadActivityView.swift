@@ -19,13 +19,7 @@ struct ReadActivityView: View {
                 Text(activity.title ?? "")
             }
             
-            HStack {
-                TextField("Item title", text: $itemTitle)
-                    .textFieldStyle(.roundedBorder)
-                Button(action: addItem) {
-                    Label("", systemImage: "plus")
-                }
-            }.padding()
+            
             
             List {
                 ForEach(activity.itemsArray) { item in
@@ -51,6 +45,13 @@ struct ReadActivityView: View {
             // drop-down to copy from a specific activity and all its items
             // copy items to current activity with newitem.activityTitle = activitySelected.title
             // newitem.title = item.title
+            HStack {
+                TextField("Item title", text: $itemTitle)
+                    .textFieldStyle(.roundedBorder)
+                Button(action: addItem) {
+                    Label("", systemImage: "plus")
+                }
+            }.padding()
         }
     }
     
