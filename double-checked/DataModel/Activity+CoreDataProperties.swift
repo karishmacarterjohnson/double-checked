@@ -28,7 +28,10 @@ extension Activity {
         let itemSet = items as? Set<Item> ?? []
         
         return itemSet.sorted {
-            $0.unwrappedTitle < $1.unwrappedTitle // sorts array alphabetically // do like this with the bool
+            if $0.check == $1.check {
+                return $0.unwrappedTitle < $1.unwrappedTitle
+            }
+            return $1.check && !$0.check
         }
     }
 
