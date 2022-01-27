@@ -13,11 +13,22 @@ struct ReadActivityView: View {
     @StateObject var activity: Activity
     @State private var itemTitle: String = ""
     
+    @State private var selectedActivity = ""
+    let activitieslist: [String] = ["act1", "activityB", "actC"]
+    
     var body: some View {
+        
         VStack {
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
                 Text(activity.title ?? "") // !! add > to indicate navigation
             }
+            HStack {
+                TextField("Item title", text: $itemTitle)
+                    .textFieldStyle(.roundedBorder)
+                Button(action: addItem) {
+                    Label("", systemImage: "plus")
+                }
+            }.padding()
             
             // !! due date
             // progress bar
@@ -41,13 +52,26 @@ struct ReadActivityView: View {
             // !! drop-down to copy from a specific activity and all its items
             // copy items to current activity with newitem.activityTitle = activitySelected.title
             // newitem.title = item.title
-            HStack {
-                TextField("Item title", text: $itemTitle)
-                    .textFieldStyle(.roundedBorder)
-                Button(action: addItem) {
-                    Label("", systemImage: "plus")
+            
+            Text(selectedActivity)
+            NavigationView {
+                Form {
+                    Section {
+                        HStack {
+                            Picker("Activity", selection: $selectedActivity) {
+                                ForEach(activitieslist, id:\.self) {
+                                    Text($0)
+                                }
+                            }.pickerStyle(MenuPickerStyle())
+                            
+                            Button(action: addActivity) {
+                                Label("", systemImage:"plus")
+                            }
+                        }
+                    }
+                    
                 }
-            }.padding()
+            }
         }
     }
     
@@ -64,15 +88,19 @@ struct ReadActivityView: View {
         
     }
     
-    private func toggleCheck(at offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                let item = activity.itemsArray[index]
-                item.check = !item.check
-                PersistenceController.shared.saveContext()
-            }
-        }
+    private func addActivity() {
+        //
     }
+    
+//    private func toggleCheck(at offsets: IndexSet) {
+//        withAnimation {
+//            for index in offsets {
+//                let item = activity.itemsArray[index]
+//                item.check = !item.check
+//                PersistenceController.shared.saveContext()
+//            }
+//        }
+//    }
     
     private func addItem() {
         withAnimation {
