@@ -26,7 +26,12 @@ struct ReadActivityView: View {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
                         ForEach(items) { item in
-                            Text(item.unwrappedTitle)
+                            if item.check {
+                                Text(item.unwrappedTitle).strikethrough()
+                            } else {
+                                Text(item.unwrappedTitle)
+                            }
+                            
                         }.onDelete(perform: deleteItem)
                     }
                     
@@ -61,13 +66,11 @@ struct ReadActivityView: View {
     
     private func toggleCheck(at offsets: IndexSet) {
         withAnimation {
-            
             for index in offsets {
                 let item = activity.itemsArray[index]
                 item.check = !item.check
-                
+                PersistenceController.shared.saveContext()
             }
-            PersistenceController.shared.saveContext()
         }
     }
     
