@@ -29,29 +29,31 @@ struct ContentView: View {
                         Label("", systemImage: "plus")
                     }
                 }.padding(.leading).padding(.trailing)
+                
                 List { // !! group by date: today, upcoming, else.
+                    
                     ForEach(activities) {activity in
-                        NavigationLink(destination: ReadActivityView(activity: activity)) {
+                        NavigationLink(destination: ReadActivityView(activity: activity, activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle))) {
                             VStack {
-                            Text(activity.title ?? "")
+                                Text(activity.title ?? "")
                                 ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
                             }
                         }
-                    }.onDelete(perform: deleteActivity)
+                    }.onDelete(perform: deleteActivity) //.listRowBackground(Color(UIColor.systemPink))
                 }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
             }.navigationBarTitle("Activities", displayMode: .inline)
-            
-            
         }
     }
     
-//    private func getActivityTitles() -> [String?] {
-//        var activityTitles = [String?]()
-//        for activity in activities {
-//            activityTitles.append(activity.unwrappedTitle)
-//        }
-//        return activityTitles
-//    }
+    private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
+        var activityTitles = [String]()
+        for act in activitiesList {
+            if act.unwrappedTitle != activityTitle {
+                activityTitles.append(act.unwrappedTitle)
+            }
+        }
+        return activityTitles
+    }
     
     
     private func deleteActivity(offsets: IndexSet) {

@@ -11,18 +11,11 @@ struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var activity: Activity
+    @State var activityTitles: [String]
+
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     @State var progressValue: Float = 0.4
-    
-    //////////////////////////////////////////
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
-        animation: .default)
-    private var activities: FetchedResults<Activity>
-    
-    /////////////////////////////////////////////
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "OneBag"))
     var fetchedActivities: FetchedResults<Activity>
@@ -31,15 +24,15 @@ struct ReadActivityView: View {
     
     var body: some View {
         ProgressBar(value: $progressValue).frame(height:10).padding(.leading).padding(.trailing)
+        
         VStack {
-        //////////////////////////////////////////
 //        NavigationView {
             Form {
                 Section {
                     HStack {
                         Picker("Activity", selection: $selectedActivity) {
-                            ForEach(activities, id:\.self) { act in
-                                Text(act.unwrappedTitle)
+                            ForEach(activityTitles, id:\.self) { act in
+                                Text(act)
                             }
                         }.pickerStyle(MenuPickerStyle())
                         
@@ -59,11 +52,6 @@ struct ReadActivityView: View {
             }
             
 //        }
-        //////////////////////////////////////////
-        
-            
-            
-
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
@@ -81,7 +69,7 @@ struct ReadActivityView: View {
             }//.listStyle(PlainListStyle())
             
 
-        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))//.font(.system(size: 10))
+        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))
         })
     }
     
@@ -145,7 +133,10 @@ struct ReadActivityView: View {
             
             newActivity.addToItems(item1)
             
-            return ReadActivityView(activity: newActivity)
+            let newActivityTitles = [newActivity.unwrappedTitle]
+            
+            
+            return ReadActivityView(activity: newActivity, activityTitles: newActivityTitles)
                 .environment(\.managedObjectContext,
                               PersistenceController.preview.container.viewContext)
         }
