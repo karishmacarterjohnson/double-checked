@@ -38,7 +38,7 @@ struct ReadActivityView: View {
             
             
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
-                Text(activity.title ?? "") // !! add > to indicate navigation
+                Text(activity.title ?? "") + Text(" ") + Text(Image(systemName: "chevron.forward"))//.font(.system(size: 10))
             }
             ProgressBar(value: $progressValue).frame(height:10).padding()
             HStack {
