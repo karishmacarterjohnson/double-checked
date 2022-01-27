@@ -13,6 +13,7 @@ struct ReadActivityView: View {
     @StateObject var activity: Activity
     @State private var itemTitle: String = ""    
     @State private var selectedActivity = ""
+    @State var progressValue: Float = 0.4
 
     //////////////////////////////////////////
     
@@ -49,7 +50,8 @@ struct ReadActivityView: View {
             
             // !! due date
             // progress bar
-            
+            ProgressBar(value: $progressValue).frame(height:20).padding()
+
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
