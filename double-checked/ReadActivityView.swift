@@ -40,6 +40,7 @@ struct ReadActivityView: View {
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
                 Text(activity.title ?? "") // !! add > to indicate navigation
             }
+            ProgressBar(value: $progressValue).frame(height:10).padding()
             HStack {
                 TextField("Item title", text: $itemTitle)
                     .textFieldStyle(.roundedBorder)
@@ -47,11 +48,6 @@ struct ReadActivityView: View {
                     Label("", systemImage: "plus")
                 }
             }.padding()
-            
-            // !! due date
-            // progress bar
-            ProgressBar(value: $progressValue).frame(height:20).padding()
-
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){

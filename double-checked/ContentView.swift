@@ -34,7 +34,7 @@ struct ContentView: View {
                         NavigationLink(destination: ReadActivityView(activity: activity)) {
                             VStack {
                             Text(activity.title ?? "")
-                                ProgressBar(value: $progressValue).frame(height:20) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
+                                ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
                             }
                         }
                     }.onDelete(perform: deleteActivity)
