@@ -11,13 +11,9 @@ struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var activity: Activity
-    @State private var itemTitle: String = ""    
+    @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     @State var progressValue: Float = 0.4
-
-    //////////////////////////////////////////
-    
-    let activitieslist: [String] = ["act1", "activityB", "actC"]
     
     //////////////////////////////////////////
     
@@ -27,27 +23,47 @@ struct ReadActivityView: View {
     private var activities: FetchedResults<Activity>
     
     /////////////////////////////////////////////
-    ///
-    ///
+    
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "OneBag"))
     var fetchedActivities: FetchedResults<Activity>
     
+    /////////////////////////////////////////////
+    
     var body: some View {
-        
+        ProgressBar(value: $progressValue).frame(height:10).padding(.leading).padding(.trailing)
         VStack {
-            
-            
-            NavigationLink(destination: UpdateActivityView(activity: activity)) {
-                Text(activity.title ?? "") + Text(" ") + Text(Image(systemName: "chevron.forward"))//.font(.system(size: 10))
-            }
-            ProgressBar(value: $progressValue).frame(height:10).padding()
-            HStack {
-                TextField("Item title", text: $itemTitle)
-                    .textFieldStyle(.roundedBorder)
-                Button(action: addItem) {
-                    Label("", systemImage: "plus")
+        //////////////////////////////////////////
+//        NavigationView {
+            Form {
+                Section {
+                    HStack {
+                        Picker("Activity", selection: $selectedActivity) {
+                            ForEach(activities, id:\.self) { act in
+                                Text(act.unwrappedTitle)
+                            }
+                        }.pickerStyle(MenuPickerStyle())
+                        
+                        Button(action: importActivity) {
+                            Label("", systemImage:"plus")
+                        }
+                    }
+                    HStack {
+                        TextField("Item title", text: $itemTitle)
+                            .textFieldStyle(.roundedBorder)
+                        Button(action: addItem) {
+                            Label("", systemImage: "plus")
+                        }
+                    }
                 }
-            }.padding()
+                
+            }
+            
+//        }
+        //////////////////////////////////////////
+        
+            
+            
+
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
@@ -62,43 +78,23 @@ struct ReadActivityView: View {
                     }
                     
                 }
-            }
+            }//.listStyle(PlainListStyle())
             
-            //////////////////////////////////////////
-            
-            Text(selectedActivity)
-            NavigationView {
-                Form {
-                    Section {
-                        HStack {
-                            Picker("Activity", selection: $selectedActivity) {
-                                ForEach(activities, id:\.self) { act in
-                                    Text(act.unwrappedTitle)
-                                }
-                            }.pickerStyle(MenuPickerStyle())
-                            
-                            Button(action: importActivity) {
-                                Label("", systemImage:"plus")
-                            }
-                        }
-                    }
-                    
-                }
-            }
-            //////////////////////////////////////////
-        }
+
+        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))//.font(.system(size: 10))
+        })
     }
     
     private func importActivity() {
-            let fetchedActivity = fetchedActivities[0]
-            for item in fetchedActivity.itemsArray {
-                let newItem = Item(context: viewContext)
-                newItem.title = item.unwrappedTitle
-                newItem.activityTitle = fetchedActivity.unwrappedTitle
-                activity.addToItems(newItem)
-                PersistenceController.shared.saveContext()
-            }
-    
+        let fetchedActivity = fetchedActivities[0]
+        for item in fetchedActivity.itemsArray {
+            let newItem = Item(context: viewContext)
+            newItem.title = item.unwrappedTitle
+            newItem.activityTitle = fetchedActivity.unwrappedTitle
+            activity.addToItems(newItem)
+            PersistenceController.shared.saveContext()
+        }
+        
         
     }
     
@@ -122,6 +118,7 @@ struct ReadActivityView: View {
             newItem.activityTitle = activity.unwrappedTitle
             
             activity.addToItems(newItem)
+            itemTitle = ""
             PersistenceController.shared.saveContext()
         }
     }

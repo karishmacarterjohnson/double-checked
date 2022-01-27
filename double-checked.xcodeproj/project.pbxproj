@@ -81,13 +81,10 @@
 		6E3BC8F7279F4EE40098A4F7 /* double-checked */ = {
 			isa = PBXGroup;
 			children = (
+				6E623E8527A354F100774BFB /* Components */,
 				6E1C516027A0E21E0002CDBF /* DataModel */,
 				6E3BC90C279F5A4B0098A4F7 /* Views */,
 				6E3BC8F8279F4EE40098A4F7 /* double_checkedApp.swift */,
-				6E3BC90D279F5A7C0098A4F7 /* UpdateActivityView.swift */,
-				6E3BC913279F5E290098A4F7 /* ReadActivityView.swift */,
-				6E623E8327A3424D00774BFB /* ProgressBar.swift */,
-				6E3BC8FA279F4EE40098A4F7 /* ContentView.swift */,
 				6E3BC90F279F5AAF0098A4F7 /* PersistenceController.swift */,
 				6E3BC8FC279F4EEC0098A4F7 /* Assets.xcassets */,
 				6E3BC8FE279F4EEC0098A4F7 /* Preview Content */,
@@ -106,8 +103,19 @@
 		6E3BC90C279F5A4B0098A4F7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E3BC90D279F5A7C0098A4F7 /* UpdateActivityView.swift */,
+				6E3BC913279F5E290098A4F7 /* ReadActivityView.swift */,
+				6E3BC8FA279F4EE40098A4F7 /* ContentView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		6E623E8527A354F100774BFB /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6E623E8327A3424D00774BFB /* ProgressBar.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

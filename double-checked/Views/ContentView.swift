@@ -28,7 +28,7 @@ struct ContentView: View {
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
-                }
+                }.padding(.leading).padding(.trailing)
                 List { // !! group by date: today, upcoming, else.
                     ForEach(activities) {activity in
                         NavigationLink(destination: ReadActivityView(activity: activity)) {
@@ -38,8 +38,9 @@ struct ContentView: View {
                             }
                         }
                     }.onDelete(perform: deleteActivity)
-                }.toolbar{ EditButton() }
-            }//.navigationTitle("Activities")
+                }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
+            }.navigationBarTitle("Activities", displayMode: .inline)
+            
             
         }
     }
@@ -64,6 +65,7 @@ struct ContentView: View {
         withAnimation {
             let newActivity = Activity(context: viewContext)
             newActivity.title = activityTitle
+            activityTitle = ""
             PersistenceController.shared.saveContext()
         }
     }
