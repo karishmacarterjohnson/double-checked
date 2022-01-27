@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             VStack {
-                HStack { // !! move to bottom with spacing
+                HStack {
                     TextField("Activity Name", text: $activityTitle)
                         .textFieldStyle(.roundedBorder)
                     Button(action: addActivity) {
@@ -35,12 +35,22 @@ struct ContentView: View {
                             Text("<status bar here>") // progress bar
                             }
                         }
-                    }.onDelete(perform: deleteActivity) // swipe button
+                    }.onDelete(perform: deleteActivity)
                 }.toolbar{ EditButton() }
             }//.navigationTitle("Activities")
             
         }
     }
+    
+//    private func getActivityTitles() -> [String?] {
+//        var activityTitles = [String?]()
+//        for activity in activities {
+//            activityTitles.append(activity.unwrappedTitle)
+//        }
+//        return activityTitles
+//    }
+    
+    
     private func deleteActivity(offsets: IndexSet) {
         withAnimation {
             offsets.map {activities[$0]} . forEach(viewContext.delete)
