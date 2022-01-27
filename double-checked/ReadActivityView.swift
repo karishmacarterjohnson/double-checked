@@ -11,14 +11,31 @@ struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @StateObject var activity: Activity
-    @State private var itemTitle: String = ""
-    
+    @State private var itemTitle: String = ""    
     @State private var selectedActivity = ""
+
+    //////////////////////////////////////////
+    
     let activitieslist: [String] = ["act1", "activityB", "actC"]
+    
+    //////////////////////////////////////////
+    
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
+        animation: .default)
+    private var activities: FetchedResults<Activity>
+    
+    /////////////////////////////////////////////
+    ///
+    ///
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "OneBag"))
+    var fetchedActivities: FetchedResults<Activity>
     
     var body: some View {
         
         VStack {
+            
+            
             NavigationLink(destination: UpdateActivityView(activity: activity)) {
                 Text(activity.title ?? "") // !! add > to indicate navigation
             }
@@ -49,9 +66,7 @@ struct ReadActivityView: View {
                 }
             }
             
-            // !! drop-down to copy from a specific activity and all its items
-            // copy items to current activity with newitem.activityTitle = activitySelected.title
-            // newitem.title = item.title
+            //////////////////////////////////////////
             
             Text(selectedActivity)
             NavigationView {
@@ -59,12 +74,12 @@ struct ReadActivityView: View {
                     Section {
                         HStack {
                             Picker("Activity", selection: $selectedActivity) {
-                                ForEach(activitieslist, id:\.self) {
-                                    Text($0)
+                                ForEach(activities, id:\.self) { act in
+                                    Text(act.unwrappedTitle)
                                 }
                             }.pickerStyle(MenuPickerStyle())
                             
-                            Button(action: addActivity) {
+                            Button(action: importActivity) {
                                 Label("", systemImage:"plus")
                             }
                         }
@@ -72,7 +87,21 @@ struct ReadActivityView: View {
                     
                 }
             }
+            //////////////////////////////////////////
         }
+    }
+    
+    private func importActivity() {
+            let fetchedActivity = fetchedActivities[0]
+            for item in fetchedActivity.itemsArray {
+                let newItem = Item(context: viewContext)
+                newItem.title = item.unwrappedTitle
+                newItem.activityTitle = fetchedActivity.unwrappedTitle
+                activity.addToItems(newItem)
+                PersistenceController.shared.saveContext()
+            }
+    
+        
     }
     
     private func groupItems() -> [(String?,[Item])] {
@@ -87,20 +116,6 @@ struct ReadActivityView: View {
         return listItems
         
     }
-    
-    private func addActivity() {
-        //
-    }
-    
-//    private func toggleCheck(at offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                let item = activity.itemsArray[index]
-//                item.check = !item.check
-//                PersistenceController.shared.saveContext()
-//            }
-//        }
-//    }
     
     private func addItem() {
         withAnimation {
@@ -142,3 +157,41 @@ struct ReadActivityView: View {
     }
     
 }
+
+
+// PARTY IN THE GRAVEYARD
+
+
+//    private func toggleCheck(at offsets: IndexSet) {
+//        withAnimation {
+//            for index in offsets {
+//                let item = activity.itemsArray[index]
+//                item.check = !item.check
+//                PersistenceController.shared.saveContext()
+//            }
+//        }
+//    }
+
+
+//////////////////////////////////////////
+///
+//            Text(selectedActivity)
+//            NavigationView {
+//                Form {
+//                    Section {
+//                        HStack {
+//                            Picker("Activity", selection: $selectedActivity) {
+//                                ForEach(activitieslist, id:\.self) {
+//                                    Text($0)
+//                                }
+//                            }.pickerStyle(MenuPickerStyle())
+//
+//                            Button(action: addActivity) {
+//                                Label("", systemImage:"plus")
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
+//
