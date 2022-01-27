@@ -7,10 +7,29 @@
 
 import SwiftUI
 
+struct ProgressBar: View {
+    @Binding var value: Float
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle().frame(width: geometry.size.width , height: geometry.size.height)
+                    .opacity(0.3)
+                    .foregroundColor(Color(UIColor.systemTeal))
+                withAnimation {
+                Rectangle().frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
+                    .foregroundColor(Color(UIColor.systemBlue))
+                }
+            }.cornerRadius(45.0)
+        }
+    }
+}
+
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var activityTitle: String = ""
+    @State var progressValue: Float = 0.2
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
@@ -32,7 +51,7 @@ struct ContentView: View {
                         NavigationLink(destination: ReadActivityView(activity: activity)) {
                             VStack {
                             Text(activity.title ?? "")
-                            Text("<status bar here>") // progress bar
+                                ProgressBar(value: $progressValue).frame(height:20)
                             }
                         }
                     }.onDelete(perform: deleteActivity)
