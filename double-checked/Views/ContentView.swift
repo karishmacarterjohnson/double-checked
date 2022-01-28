@@ -30,31 +30,78 @@ struct ContentView: View {
                     }
                 }.padding(.leading).padding(.trailing)
                 
-                List { // !! group by date: today, upcoming, else.
-                    
-                    ForEach(activities) {activity in
-                        NavigationLink(destination: ReadActivityView(activity: activity, activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle))) {
-                            VStack {
-                                HStack {
-                                    Text(activity.title ?? "")
-                                    Text(activity.unwrappedDate)
+                List {
+                    ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
+                        Section(header: Text(group)) {
+                            ForEach(activitiesArray) {activity in
+                                NavigationLink(destination: ReadActivityView(activity: activity, activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle))) {
+                                    VStack {
+                                        HStack {
+                                            Text(activity.title ?? "")
+                                            Text(activity.unwrappedDate)
+                                        }
+                                        ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
+                                    }
                                 }
-                                ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
                             }
                         }
+                        
                     }.onDelete(perform: deleteActivity) //.listRowBackground(Color(UIColor.systemPink))
                 }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
+
             }.navigationBarTitle("Activities", displayMode: .inline)
         }
     }
     
-    private func groupActivities() { // -> [(String?, [Activity])]
-        // var groupActivities = Dictionary()
-        // for activity in activities {
-        ///     if Calendar.current.isDateInToday{activity.date
-        ///
-        /// var groupedActivities = [(String?,[Activity])]()
-        ///
+    private func groupActivities() -> [(String, [Activity])] { // -> [(String?, [Activity])]
+        var groupActivities = [String:[Activity]]()
+        for activity in activities {
+            if activity.date == nil {
+                if groupActivities["Unscheduled"] != nil {
+                    groupActivities["Unscheduled"]?.append(activity)
+                }
+                else {
+                    groupActivities["Unscheduled"] = [activity]
+                }
+                
+            } else if Calendar.current.isDateInToday(activity.date!) {
+                if groupActivities["Today"] != nil {
+                    groupActivities["Today"]?.append(activity)
+                } else {
+                
+                    groupActivities["Today"] = [activity]
+                }
+            } else if Calendar.current.isDateInTomorrow(activity.date!) {
+                if groupActivities["Tomorrow"] != nil {
+                    groupActivities["Tomorrow"]?.append(activity)
+                } else {
+                    groupActivities["Tomorrow"] = [activity]
+                }
+            } else if activity.date! < Date() {
+                if groupActivities["Past"] != nil {
+                    groupActivities["Past"]?.append(activity)
+                } else {
+                    groupActivities["Past"] = [activity]
+                }
+            } else {
+                if groupActivities["Upcoming"] != nil {
+                    groupActivities["Upcoming"]?.append(activity)
+                } else {
+                    groupActivities["Upcoming"] =  [activity]
+                }
+            }
+           
+        }
+        
+        var groupedActivities = [(String, [Activity])]()
+        let groups = ["Today", "Tomorrow", "Upcoming", "Unscheduled", "Past"]
+        
+        for group in groups {
+            if groupActivities[group] != nil {
+                groupedActivities.append((group, groupActivities[group]!))
+            }
+        }
+        return groupedActivities
     }
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
