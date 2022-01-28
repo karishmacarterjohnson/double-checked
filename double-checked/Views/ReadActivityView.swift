@@ -108,13 +108,15 @@ struct ReadActivityView: View {
     
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.title = itemTitle
-            newItem.activityTitle = activity.unwrappedTitle
-            
-            activity.addToItems(newItem)
-            itemTitle = ""
-            PersistenceController.shared.saveContext()
+            if itemTitle != "" {
+                let newItem = Item(context: viewContext)
+                newItem.title = itemTitle
+                newItem.activityTitle = activity.unwrappedTitle
+                
+                activity.addToItems(newItem)
+                itemTitle = ""
+                PersistenceController.shared.saveContext()
+            }
         }
     }
     private func deleteItem(at offsets: IndexSet) {

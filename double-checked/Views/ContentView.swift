@@ -47,7 +47,7 @@ struct ContentView: View {
                         
                     }.onDelete(perform: deleteActivity) //.listRowBackground(Color(UIColor.systemPink))
                 }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
-
+                
             }.navigationBarTitle("Activities", displayMode: .inline)
         }
     }
@@ -56,18 +56,19 @@ struct ContentView: View {
         var groupActivities = [String:[Activity]]()
         for activity in activities {
             if activity.date == nil {
+                // str as param
                 if groupActivities["Unscheduled"] != nil {
                     groupActivities["Unscheduled"]?.append(activity)
                 }
                 else {
                     groupActivities["Unscheduled"] = [activity]
                 }
-                
+                //
             } else if Calendar.current.isDateInToday(activity.date!) {
                 if groupActivities["Today"] != nil {
                     groupActivities["Today"]?.append(activity)
                 } else {
-                
+                    
                     groupActivities["Today"] = [activity]
                 }
             } else if Calendar.current.isDateInTomorrow(activity.date!) {
@@ -77,6 +78,7 @@ struct ContentView: View {
                     groupActivities["Tomorrow"] = [activity]
                 }
             } else if activity.date! < Date() {
+                // if # complete == act.itemsArray.count -> ()
                 if groupActivities["Past"] != nil {
                     groupActivities["Past"]?.append(activity)
                 } else {
@@ -89,7 +91,7 @@ struct ContentView: View {
                     groupActivities["Upcoming"] =  [activity]
                 }
             }
-           
+            
         }
         
         var groupedActivities = [(String, [Activity])]()
@@ -113,7 +115,7 @@ struct ContentView: View {
         }
         return Float(Double(checkedCount) / Double(total))
     }
- 
+    
     private func deleteActivity(offsets: IndexSet) {
         withAnimation {
             offsets.map {activities[$0]} . forEach(viewContext.delete)
@@ -123,10 +125,12 @@ struct ContentView: View {
     
     private func addActivity() {
         withAnimation {
-            let newActivity = Activity(context: viewContext)
-            newActivity.title = activityTitle
-            activityTitle = ""
-            PersistenceController.shared.saveContext()
+            if activityTitle != "" {
+                let newActivity = Activity(context: viewContext)
+                newActivity.title = activityTitle
+                activityTitle = ""
+                PersistenceController.shared.saveContext()
+            }
         }
     }
     
