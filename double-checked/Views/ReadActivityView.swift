@@ -10,13 +10,15 @@ import SwiftUI
 struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
+    
     @StateObject var activity: Activity
     @State var activityTitles: [String]
+    @State var activityArray: FetchedResults<Activity>
 
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "OneBag"))
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "Thursday Vibes"))
     var fetchedActivities: FetchedResults<Activity>
     
     /////////////////////////////////////////////
@@ -30,7 +32,7 @@ struct ReadActivityView: View {
                 Section {
                     HStack {
                         Picker("Activity", selection: $selectedActivity) {
-                            ForEach(activityTitles, id:\.self) { act in
+                            ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
                                 Text(act)
                             }
                         }.pickerStyle(MenuPickerStyle())
@@ -83,6 +85,17 @@ struct ReadActivityView: View {
         }
         
         
+    }
+    
+    private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
+        var activityTitles = [String]()
+        
+        for act in activitiesList {
+            if act.unwrappedTitle != activityTitle {
+                activityTitles.append(act.unwrappedTitle)
+            }
+        }
+        return activityTitles
     }
     
     private func groupItems() -> [(String?,[Item])] {
@@ -144,9 +157,15 @@ struct ReadActivityView: View {
             newActivity.addToItems(item1)
             
             let newActivityTitles = [newActivity.unwrappedTitle]
+            //let activityArray = [newActivity]
+            
+            @FetchRequest(
+                sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
+                animation: .default)
+            var activityArray: FetchedResults<Activity>
             
             
-            return ReadActivityView(activity: newActivity, activityTitles: newActivityTitles)
+            return ReadActivityView(activity: newActivity, activityTitles: newActivityTitles, activityArray: activityArray)
                 .environment(\.managedObjectContext,
                               PersistenceController.preview.container.viewContext)
         }

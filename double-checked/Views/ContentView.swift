@@ -34,7 +34,7 @@ struct ContentView: View {
                     ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
                         Section(header: Text(group)) {
                             ForEach(activitiesArray) {activity in
-                                NavigationLink(destination: ReadActivityView(activity: activity, activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle))) {
+                                NavigationLink(destination: ReadActivityView(activity: activity,  activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle),activityArray: activities)) {
                                     VStack {
                                         HStack {
                                             Text(activity.title ?? "")
