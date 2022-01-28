@@ -38,7 +38,7 @@ extension Activity {
     public var unwrappedDate: String {
         if date != nil {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "d MMM YY"
+            dateFormatter.dateFormat = "MMM d, YYYY"//"d MMM YY"
             return dateFormatter.string(from: date!)
     
         } else {

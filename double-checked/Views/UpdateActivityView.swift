@@ -31,7 +31,7 @@ struct UpdateActivityView: View {
             Section(header: Text("Select Date")) {
                 HStack {
                     // current date selection
-                    Text(activity.date ?? Date(), style: .date) // priv func format str
+                    Text(activity.unwrappedDate) // priv func format str
                     // 
                     Spacer()
                     Button(action: clearDate) {
