@@ -17,9 +17,6 @@ struct ReadActivityView: View {
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "Thursday Vibes"))
-    var fetchedActivities: FetchedResults<Activity>
-    
     /////////////////////////////////////////////
     
     var body: some View {
@@ -64,27 +61,24 @@ struct ReadActivityView: View {
         }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
-    private func importActivity() {
-        let fetchedActivity = fetchedActivities[0]
-        for item in fetchedActivity.itemsArray {
-            let newItem = Item(context: viewContext)
-            newItem.title = item.unwrappedTitle
-            newItem.activityTitle = fetchedActivity.unwrappedTitle
-            activity.addToItems(newItem)
-            PersistenceController.shared.saveContext()
+        private func importActivity() {
+            for act in activityArray {
+                if act.unwrappedTitle == selectedActivity {
+                    for item in act.itemsArray {
+                        let newItem = Item(context: viewContext)
+                        newItem.title = item.unwrappedTitle
+                        newItem.activityTitle = selectedActivity
+                        activity.addToItems(newItem)
+                        PersistenceController.shared.saveContext()
+                    }
+                }
+            }
         }
-        
-    }
-    
-    /// private func importActivity() {
-    ///    for activity in activities
-    ///          if activity.unwrappedTitle == selectedActivity
-    /// }
     
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
-        
+        activityTitles.append("Choose Activity")
         for act in activitiesList {
             if act.unwrappedTitle != activityTitle {
                 activityTitles.append(act.unwrappedTitle)
@@ -179,27 +173,3 @@ struct ReadActivityView: View {
 //            }
 //        }
 //    }
-
-
-//////////////////////////////////////////
-///
-//            Text(selectedActivity)
-//            NavigationView {
-//                Form {
-//                    Section {
-//                        HStack {
-//                            Picker("Activity", selection: $selectedActivity) {
-//                                ForEach(activitieslist, id:\.self) {
-//                                    Text($0)
-//                                }
-//                            }.pickerStyle(MenuPickerStyle())
-//
-//                            Button(action: addActivity) {
-//                                Label("", systemImage:"plus")
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
-//
