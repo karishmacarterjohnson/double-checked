@@ -15,7 +15,6 @@ struct ReadActivityView: View {
 
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
-    @State var progressValue: Float = 0.4
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], predicate: NSPredicate(format: "title == %@", "OneBag"))
     var fetchedActivities: FetchedResults<Activity>
@@ -23,7 +22,7 @@ struct ReadActivityView: View {
     /////////////////////////////////////////////
     
     var body: some View {
-        ProgressBar(value: $progressValue).frame(height:10).padding(.leading).padding(.trailing)
+        ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.leading).padding(.trailing)
         
         VStack {
 //        NavigationView {
@@ -118,6 +117,17 @@ struct ReadActivityView: View {
                 PersistenceController.shared.saveContext()
             }
         }
+    }
+    
+    private func progressValue(activity: Activity) -> Float {
+        let total: Int = activity.itemsArray.count
+        var checkedCount: Int = 0
+        for x in activity.itemsArray {
+            if x.check {
+                checkedCount += 1
+            }
+        }
+        return Float(Double(checkedCount) / Double(total))
     }
     
     struct ReadActivityView_Previews: PreviewProvider {

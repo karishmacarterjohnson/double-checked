@@ -12,7 +12,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var activityTitle: String = ""
-    @State var progressValue: Float = 0.2
+    //@State var progressValue: Float = 0.2
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
@@ -40,7 +40,7 @@ struct ContentView: View {
                                             Text(activity.title ?? "")
                                             Text(activity.unwrappedDate)
                                         }
-                                        ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
+                                        ProgressBar(value: progressValue(activity: activity)).frame(height:10)
                                     }
                                 }
                             }
@@ -106,6 +106,7 @@ struct ContentView: View {
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
+        
         for act in activitiesList {
             if act.unwrappedTitle != activityTitle {
                 activityTitles.append(act.unwrappedTitle)
@@ -114,7 +115,17 @@ struct ContentView: View {
         return activityTitles
     }
     
-    
+    private func progressValue(activity: Activity) -> Float {
+        let total: Int = activity.itemsArray.count
+        var checkedCount: Int = 0
+        for x in activity.itemsArray {
+            if x.check {
+                checkedCount += 1
+            }
+        }
+        return Float(Double(checkedCount) / Double(total))
+    }
+ 
     private func deleteActivity(offsets: IndexSet) {
         withAnimation {
             offsets.map {activities[$0]} . forEach(viewContext.delete)
