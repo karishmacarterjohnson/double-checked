@@ -15,7 +15,7 @@ struct ContentView: View {
     @State var progressValue: Float = 0.2
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.title, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
+        sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
         animation: .default)
     private var activities: FetchedResults<Activity>
     
@@ -43,6 +43,15 @@ struct ContentView: View {
                 }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
             }.navigationBarTitle("Activities", displayMode: .inline)
         }
+    }
+    
+    private func groupActivities() { // -> [(String?, [Activity])]
+        // var groupActivities = Dictionary()
+        // for activity in activities {
+        ///     if Calendar.current.isDateInToday{activity.date
+        ///
+        /// var groupedActivities = [(String?,[Activity])]()
+        ///
     }
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
