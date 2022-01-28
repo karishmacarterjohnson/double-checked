@@ -34,7 +34,17 @@ extension Activity {
             return $1.check && !$0.check
         }
     }
-
+    
+    public var unwrappedDate: String {
+        if date != nil {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "d MMM YY"
+            return dateFormatter.string(from: date!)
+    
+        } else {
+            return ""
+        }
+    }
 }
 
 // MARK: Generated accessors for relationship
