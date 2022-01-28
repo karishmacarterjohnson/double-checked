@@ -13,7 +13,7 @@ struct ReadActivityView: View {
     
     @StateObject var activity: Activity
     @State var activityArray: FetchedResults<Activity>
-
+    
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     
@@ -23,35 +23,28 @@ struct ReadActivityView: View {
     /////////////////////////////////////////////
     
     var body: some View {
-        ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.leading).padding(.trailing)
-        
         VStack {
-//        NavigationView {
-            Form {
-                Section {
-                    HStack {
-                        Picker("Activity", selection: $selectedActivity) {
-                            ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
-                                Text(act)
-                            }
-                        }.pickerStyle(MenuPickerStyle())
-                        
-                        Button(action: importActivity) {
-                            Label("", systemImage:"plus")
-                        }
+            ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.leading).padding(.trailing)
+            HStack {
+                Picker("Activity", selection: $selectedActivity) {
+                    ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
+                        Text(act)
                     }
-                    HStack {
-                        TextField("Item title", text: $itemTitle)
-                            .textFieldStyle(.roundedBorder)
-                        Button(action: addItem) {
-                            Label("", systemImage: "plus")
-                        }
-                    }
+                }.pickerStyle(MenuPickerStyle())
+                Spacer()
+                Button(action: importActivity) {
+                    Label("", systemImage:"plus")
                 }
-                
-            }
+            }.padding(.leading).padding(.trailing).padding(.top)
+            HStack {
+                TextField("Item title", text: $itemTitle)
+                    .textFieldStyle(.roundedBorder)
+                Button(action: addItem) {
+                    Label("", systemImage: "plus")
+                }
+            }.padding(.leading).padding(.trailing)
             
-//        }
+            
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
@@ -68,9 +61,7 @@ struct ReadActivityView: View {
                 }
             }//.listStyle(PlainListStyle())
             
-
-        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))
-        })
+        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
     private func importActivity() {
@@ -83,8 +74,13 @@ struct ReadActivityView: View {
             PersistenceController.shared.saveContext()
         }
         
-        
     }
+    
+    /// private func importActivity() {
+    ///    for activity in activities
+    ///          if activity.unwrappedTitle == selectedActivity
+    /// }
+    
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
@@ -154,7 +150,7 @@ struct ReadActivityView: View {
             item1.activityTitle = "group"
             
             newActivity.addToItems(item1)
-               
+            
             @FetchRequest(
                 sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
                 animation: .default)
