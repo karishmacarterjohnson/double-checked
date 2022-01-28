@@ -35,7 +35,10 @@ struct ContentView: View {
                     ForEach(activities) {activity in
                         NavigationLink(destination: ReadActivityView(activity: activity, activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle))) {
                             VStack {
-                                Text(activity.title ?? "")
+                                HStack {
+                                    Text(activity.title ?? "")
+                                    Text(activity.unwrappedDate)
+                                }
                                 ProgressBar(value: $progressValue).frame(height:10) //$progressValue should be calculated based on count of true values / activity.itemsArray.count rounded?
                             }
                         }
