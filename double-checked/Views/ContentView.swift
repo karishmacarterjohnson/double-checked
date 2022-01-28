@@ -54,42 +54,28 @@ struct ContentView: View {
     
     private func groupActivities() -> [(String, [Activity])] { // -> [(String?, [Activity])]
         var groupActivities = [String:[Activity]]()
+        
+        func buildGroup(group: String, act: Activity) {
+            if groupActivities[group] != nil {
+                groupActivities[group]?.append(act)
+            }
+            else {
+                groupActivities[group] = [act]
+            }
+        }
+        
         for activity in activities {
             if activity.date == nil {
-                // str as param
-                if groupActivities["Unscheduled"] != nil {
-                    groupActivities["Unscheduled"]?.append(activity)
-                }
-                else {
-                    groupActivities["Unscheduled"] = [activity]
-                }
-                //
+                buildGroup(group: "Unscheduled", act: activity)
             } else if Calendar.current.isDateInToday(activity.date!) {
-                if groupActivities["Today"] != nil {
-                    groupActivities["Today"]?.append(activity)
-                } else {
-                    
-                    groupActivities["Today"] = [activity]
-                }
+                buildGroup(group: "Today", act: activity)
             } else if Calendar.current.isDateInTomorrow(activity.date!) {
-                if groupActivities["Tomorrow"] != nil {
-                    groupActivities["Tomorrow"]?.append(activity)
-                } else {
-                    groupActivities["Tomorrow"] = [activity]
-                }
+                buildGroup(group: "Tomorrow", act: activity)
             } else if activity.date! < Date() {
                 // if # complete == act.itemsArray.count -> ()
-                if groupActivities["Past"] != nil {
-                    groupActivities["Past"]?.append(activity)
-                } else {
-                    groupActivities["Past"] = [activity]
-                }
+                buildGroup(group: "Past", act: activity)
             } else {
-                if groupActivities["Upcoming"] != nil {
-                    groupActivities["Upcoming"]?.append(activity)
-                } else {
-                    groupActivities["Upcoming"] =  [activity]
-                }
+                buildGroup(group: "Upcoming", act: activity)
             }
             
         }
