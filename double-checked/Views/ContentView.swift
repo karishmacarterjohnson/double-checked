@@ -12,7 +12,6 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var activityTitle: String = ""
-    //@State var progressValue: Float = 0.2
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
@@ -34,7 +33,7 @@ struct ContentView: View {
                     ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
                         Section(header: Text(group)) {
                             ForEach(activitiesArray) {activity in
-                                NavigationLink(destination: ReadActivityView(activity: activity,  activityTitles: getActivityTitles(activitiesList: activities, activityTitle: activity.unwrappedTitle),activityArray: activities)) {
+                                NavigationLink(destination: ReadActivityView(activity: activity  ,activityArray: activities)) {
                                     VStack {
                                         HStack {
                                             Text(activity.title ?? "")
@@ -102,17 +101,6 @@ struct ContentView: View {
             }
         }
         return groupedActivities
-    }
-    
-    private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
-        var activityTitles = [String]()
-        
-        for act in activitiesList {
-            if act.unwrappedTitle != activityTitle {
-                activityTitles.append(act.unwrappedTitle)
-            }
-        }
-        return activityTitles
     }
     
     private func progressValue(activity: Activity) -> Float {

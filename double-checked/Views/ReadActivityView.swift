@@ -12,7 +12,6 @@ struct ReadActivityView: View {
     
     
     @StateObject var activity: Activity
-    @State var activityTitles: [String]
     @State var activityArray: FetchedResults<Activity>
 
     @State private var itemTitle: String = ""
@@ -155,17 +154,13 @@ struct ReadActivityView: View {
             item1.activityTitle = "group"
             
             newActivity.addToItems(item1)
-            
-            let newActivityTitles = [newActivity.unwrappedTitle]
-            //let activityArray = [newActivity]
-            
+               
             @FetchRequest(
                 sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
                 animation: .default)
             var activityArray: FetchedResults<Activity>
             
-            
-            return ReadActivityView(activity: newActivity, activityTitles: newActivityTitles, activityArray: activityArray)
+            return ReadActivityView(activity: newActivity, activityArray: activityArray)
                 .environment(\.managedObjectContext,
                               PersistenceController.preview.container.viewContext)
         }
