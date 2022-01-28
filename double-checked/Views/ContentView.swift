@@ -73,7 +73,11 @@ struct ContentView: View {
                 buildGroup(group: "Tomorrow", act: activity)
             } else if activity.date! < Date() {
                 // if # complete == act.itemsArray.count -> ()
-                buildGroup(group: "Past", act: activity)
+                if countComplete(activity: activity) != activity.itemsArray.count {
+                    buildGroup(group: "Overdue", act: activity)
+                } else {
+                    buildGroup(group: "Past", act: activity)
+                }
             } else {
                 buildGroup(group: "Upcoming", act: activity)
             }
@@ -81,7 +85,7 @@ struct ContentView: View {
         }
         
         var groupedActivities = [(String, [Activity])]()
-        let groups = ["Today", "Tomorrow", "Upcoming", "Unscheduled", "Past"]
+        let groups = ["Today", "Tomorrow", "Overdue", "Upcoming", "Unscheduled", "Past"]
         
         for group in groups {
             if groupActivities[group] != nil {
@@ -91,15 +95,19 @@ struct ContentView: View {
         return groupedActivities
     }
     
-    private func progressValue(activity: Activity) -> Float {
-        let total: Int = activity.itemsArray.count
+    private func countComplete(activity: Activity) -> Int {
         var checkedCount: Int = 0
         for x in activity.itemsArray {
             if x.check {
                 checkedCount += 1
             }
         }
-        return Float(Double(checkedCount) / Double(total))
+        return checkedCount
+    }
+    
+    private func progressValue(activity: Activity) -> Float {
+        let total: Int = activity.itemsArray.count
+        return Float(Double(countComplete(activity: activity)) / Double(total))
     }
     
     private func deleteActivity(offsets: IndexSet) {
