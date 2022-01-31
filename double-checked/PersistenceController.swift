@@ -22,8 +22,19 @@ struct PersistenceController {
 
         // Activities // make avail in previews
         let newActivity = Activity(context: viewContext)
-        newActivity.title = "Visit Nidhi"
-
+        newActivity.title = "Visit Cousin"
+        
+        let newActivity2 = Activity(context: viewContext)
+        newActivity2.title = "India trip"
+        newActivity2.date = Date()
+        //shared.saveContext()
+        
+        let newItem = Item(context: viewContext)
+        newItem.title = "stereo"
+        newItem.activityTitle = newActivity.unwrappedTitle
+        
+        newActivity.addToItems(newItem)
+        
         shared.saveContext()
         
         return result

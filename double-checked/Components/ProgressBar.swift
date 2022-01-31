@@ -15,8 +15,8 @@ struct ProgressBar: View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
                 Rectangle().frame(width: geometry.size.width , height: geometry.size.height)
-                    .opacity(0.3)
-                    .foregroundColor(Color(UIColor.systemPink))
+                    .opacity(  1.0)
+                    .foregroundColor(Color(UIColor.white))
                 withAnimation {
                 Rectangle().frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
                     .foregroundColor(Color(UIColor.systemOrange))

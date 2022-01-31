@@ -18,41 +18,65 @@ struct ContentView: View {
         animation: .default)
     private var activities: FetchedResults<Activity>
     
+    private var main1: Color = Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255)
+    private var main2: Color = Color(red: 255 / 255, green: 100 / 255, blue: 160 / 255)
+    private var main3: Color = Color(red: 255 / 255, green: 193 / 255, blue: 125 / 255)
+    
     var body: some View {
         NavigationView{
             VStack {
                 HStack {
                     TextField("Activity Name", text: $activityTitle)
                         .textFieldStyle(.roundedBorder)
+                        .foregroundColor(main2)
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
-                }.padding(.leading).padding(.trailing)
+                }.padding(.horizontal)
                 
                 List {
                     ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
-                        Section(header: Text(group)) {
-                            ForEach(activitiesArray) {activity in
-                                NavigationLink(destination: ReadActivityView(activity: activity  ,activityArray: activities)) {
+                        Section(header: Text(group)
+                                    .foregroundColor(main1)
+                                    .font(.body)
+                                    .textCase(.uppercase)) {
+                            ForEach(activitiesArray, id:\.self.title) {activity in
+                                NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
                                     VStack {
-                                        HStack {
+                                        HStack { // (alignment: .bottom)
                                             Text(activity.title ?? "")
+                                            Spacer()
                                             Text(activity.unwrappedDate)
-                                        }
-                                        ProgressBar(value: progressValue(activity: activity)).frame(height:10)
+                                                .fontWeight(.light)
+                                                .font(.caption)
+                                            
+                                        }.foregroundColor(main1)
+                                            .font(.body)
+                                        ProgressBar(value: progressValue(activity: activity)).frame(height:4)
+                                    }
+                                    
+                                }.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button( action: {deleteActivity(activity: activity)}) {
+                                        Label("", systemImage: "trash")
                                     }
                                 }
+                                //.listRowSeparator(.hidden)
+                                
+                                .listRowBackground(main3)
                             }
                         }
                         
-                    }.onDelete(perform: deleteActivity) //.listRowBackground(Color(UIColor.systemPink))
-                }.toolbar{ EditButton() } .listStyle(SidebarListStyle())
+                    }
+                }.listStyle(SidebarListStyle())
                 
             }.navigationBarTitle("Activities", displayMode: .inline)
-        }
+                .background(main3)
+                .foregroundColor(main1)
+            
+        }.foregroundColor(main1)
     }
     
-    private func groupActivities() -> [(String, [Activity])] { // -> [(String?, [Activity])]
+    private func groupActivities() -> [(String, [Activity])] {
         var groupActivities = [String:[Activity]]()
         
         func buildGroup(group: String, act: Activity) {
@@ -72,7 +96,6 @@ struct ContentView: View {
             } else if Calendar.current.isDateInTomorrow(activity.date!) {
                 buildGroup(group: "Tomorrow", act: activity)
             } else if activity.date! < Date() {
-                // if # complete == act.itemsArray.count -> ()
                 if countComplete(activity: activity) != activity.itemsArray.count {
                     buildGroup(group: "Overdue", act: activity)
                 } else {
@@ -110,10 +133,27 @@ struct ContentView: View {
         return Float(Double(countComplete(activity: activity)) / Double(total))
     }
     
-    private func deleteActivity(offsets: IndexSet) {
+    private func deleteActivity(activity: Activity) {
+//        withAnimation {
+//            offsets.map {activities[$0]} . forEach(viewContext.delete)
+//            PersistenceController.shared.saveContext()
+//        }
+//        withAnimation {
+//            for index in offsets {
+//                let a = activities[index+1]
+//                viewContext.delete(a)
+//                PersistenceController.shared.saveContext()
+//            }
+//        }
         withAnimation {
-            offsets.map {activities[$0]} . forEach(viewContext.delete)
-            PersistenceController.shared.saveContext()
+            var ct: Int = 0
+            for a in activities {
+                if ct == 0 && a.title == activity.title && a.date == activity.date && a.items == activity.items {
+                    viewContext.delete(a)
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
+            }
         }
     }
     

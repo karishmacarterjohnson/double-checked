@@ -21,7 +21,7 @@ struct ReadActivityView: View {
     
     var body: some View {
         VStack {
-            ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.leading).padding(.trailing)
+            ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.horizontal)
             HStack {
                 Picker("Activity", selection: $selectedActivity) {
                     ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
@@ -32,27 +32,48 @@ struct ReadActivityView: View {
                 Button(action: importActivity) {
                     Label("", systemImage:"plus")
                 }
-            }.padding(.leading).padding(.trailing).padding(.top)
+            }.padding(.horizontal).padding(.top)
             HStack {
                 TextField("Item title", text: $itemTitle)
                     .textFieldStyle(.roundedBorder)
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
                 }
-            }.padding(.leading).padding(.trailing)
-            
+            }.padding(.horizontal)
             
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
                         ForEach(items) { item in
                             if item.check {
-                                Text(item.unwrappedTitle).strikethrough()
+                                // button to togglecheck
+                                HStack {
+                                    Button(action: {toggleCheck(item: item)}) {
+                                        Label("", systemImage: "checkmark.square")
+                                    }
+                                    Text(item.unwrappedTitle).strikethrough()
+                                    
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button( action: {deleteItem(item:item)}) {
+                                        Label("", systemImage: "trash")
+                                    }
+                                }
                             } else {
-                                Text(item.unwrappedTitle)
+                                // button to togglecheck
+                                HStack {
+                                    Button(action: {toggleCheck(item: item)}) {
+                                        Label("", systemImage: "square")
+                                    }
+                                    Text(item.unwrappedTitle)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button( action: {deleteItem(item:item)}) {
+                                        Label("", systemImage: "trash")
+                                    }
+                                }
                             }
-                            
-                        }.onDelete(perform: deleteItem)
+                        }//.onDelete(perform: {deleteItem)
                     }
                     
                 }
@@ -61,20 +82,49 @@ struct ReadActivityView: View {
         }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
-        private func importActivity() {
-            for act in activityArray {
-                if act.unwrappedTitle == selectedActivity {
-                    for item in act.itemsArray {
-                        let newItem = Item(context: viewContext)
-                        newItem.title = item.unwrappedTitle
-                        newItem.activityTitle = selectedActivity
-                        activity.addToItems(newItem)
-                        PersistenceController.shared.saveContext()
-                    }
+    private func importActivity() {
+        for act in activityArray {
+            if act.unwrappedTitle == selectedActivity {
+                for item in act.itemsArray {
+                    let newItem = Item(context: viewContext)
+                    newItem.title = item.unwrappedTitle
+                    newItem.activityTitle = selectedActivity
+                    activity.addToItems(newItem)
+                    PersistenceController.shared.saveContext()
                 }
             }
         }
+    }
     
+    
+//        private func toggleCheck() {
+//            var ct: Int = 0
+//            for i in activity.itemsArray {
+//                if ct == 0 && item.unwrappedTitle == i.unwrappedTitle && item.unwrappedActivityTitle == i.unwrappedActivityTitle  {
+//                    item.check = !item.check
+//                    ct += 1
+//                    PersistenceController.shared.saveContext()
+//                }
+//            }
+//        }
+    
+    private func toggleCheck(item: Item) {
+        withAnimation {
+        var ct: Int = 0
+        let newItem = Item(context: viewContext)
+        for i in activity.itemsArray {
+            if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
+                newItem.title = item.title
+                newItem.activityTitle = item.activityTitle
+                newItem.check = !item.check
+                activity.addToItems(newItem)
+                viewContext.delete(i)
+                ct += 1
+                PersistenceController.shared.saveContext()
+            }
+        }
+        }
+    }
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
@@ -113,13 +163,22 @@ struct ReadActivityView: View {
             }
         }
     }
-    private func deleteItem(at offsets: IndexSet) {
+    private func deleteItem(item: Item) {
         withAnimation {
-            for index in offsets {
-                let item = activity.itemsArray[index]
-                viewContext.delete(item)
-                PersistenceController.shared.saveContext()
+//            for index in offsets {
+//                let item = activity.itemsArray[index]
+//                viewContext.delete(item)
+//                PersistenceController.shared.saveContext()
+//            }
+            var ct: Int = 0
+            for i in activity.itemsArray {
+                if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
+                    viewContext.delete(i)
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
             }
+            
         }
     }
     
