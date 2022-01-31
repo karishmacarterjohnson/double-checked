@@ -91,11 +91,3 @@ struct UpdateView_Previews: PreviewProvider {
         
     }
 }
-
-// PARTY IN THE GRAVEYARD
-
-//    private func dateFormatter() {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "MM dd, yyyy"
-//        return dateFormatter.string(from: activity.date)
-//    }

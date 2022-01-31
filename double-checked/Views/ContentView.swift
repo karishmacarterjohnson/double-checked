@@ -134,17 +134,6 @@ struct ContentView: View {
     }
     
     private func deleteActivity(activity: Activity) {
-//        withAnimation {
-//            offsets.map {activities[$0]} . forEach(viewContext.delete)
-//            PersistenceController.shared.saveContext()
-//        }
-//        withAnimation {
-//            for index in offsets {
-//                let a = activities[index+1]
-//                viewContext.delete(a)
-//                PersistenceController.shared.saveContext()
-//            }
-//        }
         withAnimation {
             var ct: Int = 0
             for a in activities {

@@ -46,7 +46,6 @@ struct ReadActivityView: View {
                     Section(header: Text(activityName ?? "")){
                         ForEach(items) { item in
                             if item.check {
-                                // button to togglecheck
                                 HStack {
                                     Button(action: {toggleCheck(item: item)}) {
                                         Label("", systemImage: "checkmark.square")
@@ -60,7 +59,7 @@ struct ReadActivityView: View {
                                     }
                                 }
                             } else {
-                                // button to togglecheck
+                                
                                 HStack {
                                     Button(action: {toggleCheck(item: item)}) {
                                         Label("", systemImage: "square")
@@ -73,7 +72,7 @@ struct ReadActivityView: View {
                                     }
                                 }
                             }
-                        }//.onDelete(perform: {deleteItem)
+                        }
                     }
                     
                 }
@@ -96,33 +95,21 @@ struct ReadActivityView: View {
         }
     }
     
-    
-//        private func toggleCheck() {
-//            var ct: Int = 0
-//            for i in activity.itemsArray {
-//                if ct == 0 && item.unwrappedTitle == i.unwrappedTitle && item.unwrappedActivityTitle == i.unwrappedActivityTitle  {
-//                    item.check = !item.check
-//                    ct += 1
-//                    PersistenceController.shared.saveContext()
-//                }
-//            }
-//        }
-    
     private func toggleCheck(item: Item) {
         withAnimation {
-        var ct: Int = 0
-        let newItem = Item(context: viewContext)
-        for i in activity.itemsArray {
-            if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
-                newItem.title = item.title
-                newItem.activityTitle = item.activityTitle
-                newItem.check = !item.check
-                activity.addToItems(newItem)
-                viewContext.delete(i)
-                ct += 1
-                PersistenceController.shared.saveContext()
+            var ct: Int = 0
+            let newItem = Item(context: viewContext)
+            for i in activity.itemsArray {
+                if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
+                    newItem.title = item.title
+                    newItem.activityTitle = item.activityTitle
+                    newItem.check = !item.check
+                    activity.addToItems(newItem)
+                    viewContext.delete(i)
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
             }
-        }
         }
     }
     
@@ -165,11 +152,6 @@ struct ReadActivityView: View {
     }
     private func deleteItem(item: Item) {
         withAnimation {
-//            for index in offsets {
-//                let item = activity.itemsArray[index]
-//                viewContext.delete(item)
-//                PersistenceController.shared.saveContext()
-//            }
             var ct: Int = 0
             for i in activity.itemsArray {
                 if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
@@ -218,17 +200,3 @@ struct ReadActivityView: View {
     }
     
 }
-
-
-// PARTY IN THE GRAVEYARD
-
-
-//    private func toggleCheck(at offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                let item = activity.itemsArray[index]
-//                item.check = !item.check
-//                PersistenceController.shared.saveContext()
-//            }
-//        }
-//    }
