@@ -14,6 +14,7 @@ struct ReadActivityView: View {
     @StateObject var activity: Activity
     @State var activityArray: FetchedResults<Activity>
     
+//    @State private var itemTitles = Dictionary<String?,String>()
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     
@@ -53,7 +54,7 @@ struct ReadActivityView: View {
                                     Text(item.unwrappedTitle).strikethrough()
                                     
                                 }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button( action: {deleteItem(item:item)}) {
                                         Label("", systemImage: "trash")
                                     }
@@ -66,18 +67,29 @@ struct ReadActivityView: View {
                                     }
                                     Text(item.unwrappedTitle)
                                 }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button( action: {deleteItem(item:item)}) {
                                         Label("", systemImage: "trash")
                                     }
                                 }
                             }
                         }
+//                        HStack {
+//                            Text(Image(systemName: "square"))
+////                            TextField("Add " + activityName! + " item", text: self.$itemTitles[activityName])
+////                                .textFieldStyle(.roundedBorder)
+//                            Button(action: addItem) {
+//                                Label("", systemImage: "plus")
+//                            }
+//                        }
+                        NewItemField(activity: activity, activityName: activityName!)
                     }
                     
                 }
             }//.listStyle(PlainListStyle())
-            
+            Button(action: resetActivity) {
+                Label("Reset", systemImage: "")
+            }
         }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
@@ -133,6 +145,7 @@ struct ReadActivityView: View {
         for key in strs.sorted() {
             listItems.append((key, items[key]!))
         }
+        // show current one first
         return listItems
         
     }
@@ -173,6 +186,14 @@ struct ReadActivityView: View {
             }
         }
         return Float(Double(checkedCount) / Double(total))
+    }
+    
+    private func resetActivity() {
+        for i in activity.itemsArray {
+            if i.check == true {
+                toggleCheck(item: i)
+            }
+        }
     }
     
     struct ReadActivityView_Previews: PreviewProvider {
