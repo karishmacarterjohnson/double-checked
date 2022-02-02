@@ -46,42 +46,8 @@ struct ReadActivityView: View {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
                     Section(header: Text(activityName ?? "")){
                         ForEach(items) { item in
-                            if item.check {
-                                HStack {
-                                    Button(action: {toggleCheck(item: item)}) {
-                                        Label("", systemImage: "checkmark.square")
-                                    }
-                                    Text(item.unwrappedTitle).strikethrough()
-                                    
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button( action: {deleteItem(item:item)}) {
-                                        Label("", systemImage: "trash")
-                                    }
-                                }
-                            } else {
-                                
-                                HStack {
-                                    Button(action: {toggleCheck(item: item)}) {
-                                        Label("", systemImage: "square")
-                                    }
-                                    Text(item.unwrappedTitle)
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button( action: {deleteItem(item:item)}) {
-                                        Label("", systemImage: "trash")
-                                    }
-                                }
-                            }
+                            Checked(activity:activity, item: item)
                         }
-//                        HStack {
-//                            Text(Image(systemName: "square"))
-////                            TextField("Add " + activityName! + " item", text: self.$itemTitles[activityName])
-////                                .textFieldStyle(.roundedBorder)
-//                            Button(action: addItem) {
-//                                Label("", systemImage: "plus")
-//                            }
-//                        }
                         NewItemField(activity: activity, activityName: activityName!)
                     }
                     
@@ -161,19 +127,6 @@ struct ReadActivityView: View {
                 itemTitle = ""
                 PersistenceController.shared.saveContext()
             }
-        }
-    }
-    private func deleteItem(item: Item) {
-        withAnimation {
-            var ct: Int = 0
-            for i in activity.itemsArray {
-                if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
-                    viewContext.delete(i)
-                    ct += 1
-                    PersistenceController.shared.saveContext()
-                }
-            }
-            
         }
     }
     
