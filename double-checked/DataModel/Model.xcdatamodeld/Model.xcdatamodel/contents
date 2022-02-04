@@ -4,6 +4,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="activity" inverseEntity="Item"/>
+        <relationship name="linkitems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LinkItem" inverseName="activity" inverseEntity="LinkItem"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="activityTitle" optional="YES" attributeType="String"/>
@@ -11,8 +12,14 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="items" inverseEntity="Activity"/>
     </entity>
+    <entity name="LinkItem" representedClassName="LinkItem" syncable="YES">
+        <attribute name="link" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="activity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="linkitems" inverseEntity="Activity"/>
+    </entity>
     <elements>
-        <element name="Activity" positionX="-63" positionY="-18" width="128" height="74"/>
+        <element name="Activity" positionX="-63" positionY="-18" width="128" height="89"/>
         <element name="Item" positionX="-54" positionY="0" width="128" height="89"/>
+        <element name="LinkItem" positionX="-63" positionY="27" width="128" height="74"/>
     </elements>
 </model>

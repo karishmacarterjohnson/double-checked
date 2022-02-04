@@ -41,6 +41,7 @@ struct ReadActivityView: View {
                     Label("", systemImage: "plus")
                 }
             }.padding(.horizontal)
+            ActivityLinks(activity: activity)
             
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in

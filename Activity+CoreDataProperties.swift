@@ -2,7 +2,7 @@
 //  Activity+CoreDataProperties.swift
 //  double-checked
 //
-//  Created by Karishma Johnson on 1/25/22.
+//  Created by Karishma Johnson on 2/2/22.
 //
 //
 
@@ -16,9 +16,10 @@ extension Activity {
         return NSFetchRequest<Activity>(entityName: "Activity")
     }
 
-    @NSManaged public var title: String?
     @NSManaged public var date: Date?
+    @NSManaged public var title: String?
     @NSManaged public var items: NSSet?
+    @NSManaged public var linkitems: NSSet?
     
     public var unwrappedTitle: String {
         title ?? "Unknown title"
@@ -35,19 +36,29 @@ extension Activity {
         }
     }
     
+    public var linkItemsArray: [LinkItem] {
+        let linkitemSet = linkitems as? Set<LinkItem> ?? []
+        return linkitemSet.sorted {
+            return $0.unwrappedLink < $1.unwrappedLink
+
+        }
+        
+    }
+    
     public var unwrappedDate: String {
         if date != nil {
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MMM d, YYYY"//"d MMM YY"
+            dateFormatter.dateFormat = "MMM d, YYYY"
             return dateFormatter.string(from: date!)
     
         } else {
             return ""
         }
     }
+
 }
 
-// MARK: Generated accessors for relationship
+// MARK: Generated accessors for items
 extension Activity {
 
     @objc(addItemsObject:)
@@ -61,6 +72,23 @@ extension Activity {
 
     @objc(removeItems:)
     @NSManaged public func removeFromItems(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for linkitems
+extension Activity {
+
+    @objc(addLinkitemsObject:)
+    @NSManaged public func addToLinkitems(_ value: LinkItem)
+
+    @objc(removeLinkitemsObject:)
+    @NSManaged public func removeFromLinkitems(_ value: LinkItem)
+
+    @objc(addLinkitems:)
+    @NSManaged public func addToLinkitems(_ values: NSSet)
+
+    @objc(removeLinkitems:)
+    @NSManaged public func removeFromLinkitems(_ values: NSSet)
 
 }
 
