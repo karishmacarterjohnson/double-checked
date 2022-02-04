@@ -46,23 +46,41 @@ struct ActivityLinks: View {
                     }// .background(Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255))
                 }.padding()
             }
-        }.frame(height: 100)
+        }.frame(height: 100).padding(.horizontal)
     }
     
     
     
     private func addLinkItem() {
         withAnimation {
-//        if itemLink != "" {
-            let newLinkItem = LinkItem(context: viewContext)
-            newLinkItem.link = itemLink
-            newLinkItem.title = "title here"
-            activity.addToLinkitems(newLinkItem)
-            
-            PersistenceController.shared.saveContext()
-            itemLink = ""
-            showTextField.toggle()
-//        }
+            if let url = URL(string: itemLink ) {
+                let newLinkItem = LinkItem(context: viewContext)
+                newLinkItem.link = itemLink
+                
+                do {
+                    let contents = try String(contentsOf: url)
+                    let range = NSRange(location: 0, length: contents.utf16.count)
+
+                    let regex = try! NSRegularExpression(pattern: "<title>.*?</title>")
+                    let match = regex.matches(in: contents, range: range)
+                    let matchArray = match.map {
+                        String(contents[Range($0.range, in: contents)!])
+                    }
+                    newLinkItem.title = String(matchArray[0].dropFirst(7).dropLast(8))
+                    
+                } catch {
+                    newLinkItem.title = itemLink
+                }
+                
+                activity.addToLinkitems(newLinkItem)
+                
+                PersistenceController.shared.saveContext()
+                itemLink = ""
+                showTextField.toggle()
+            } else {
+                // alert bad link
+                print("bad url!")
+            }
         }
     }
     

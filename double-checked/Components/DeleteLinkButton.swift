@@ -21,7 +21,7 @@ struct DeleteLink: View {
                         deleteLinkItem(linkItem: link)
                     }) {
                         Image(systemName: "xmark.circle")
-                            .padding(2)
+                            .padding(1)
                     }
                 }
                 .padding(.top, 5)
