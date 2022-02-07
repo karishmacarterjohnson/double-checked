@@ -23,6 +23,7 @@ struct ContentView: View {
     private var main3: Color = Color(red: 255 / 255, green: 193 / 255, blue: 125 / 255)
     
     var body: some View {
+        //Menu()
         NavigationView{
             VStack {
                 HStack {
@@ -32,7 +33,7 @@ struct ContentView: View {
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
-                }.padding(.horizontal)
+                }.padding(4).padding(.horizontal)
                 
                 List {
                     ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
@@ -43,7 +44,7 @@ struct ContentView: View {
                             ForEach(activitiesArray, id:\.self.title) {activity in
                                 NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
                                     VStack {
-                                        HStack { // (alignment: .bottom)
+                                        HStack (alignment: .firstTextBaseline) {
                                             Text(activity.title ?? "")
                                             Spacer()
                                             Text(activity.unwrappedDate)
@@ -59,10 +60,18 @@ struct ContentView: View {
                                     Button( action: {deleteActivity(activity: activity)}) {
                                         Label("", systemImage: "trash")
                                     }
+                                    Button(action: {duplicateActivityComplete(activity: activity)}) {
+                                        Label("", systemImage: "doc.on.doc")
+                                    }
+                                    Button(action: {duplicateActivityIncomplete(activity: activity)}) {
+                                        Label("", systemImage: "doc.on.doc.fill")
+                                    }
+                                    
+                                   
                                 }
-                                //.listRowSeparator(.hidden)
+                                .listRowSeparator(.hidden)
                                 
-                                .listRowBackground(main3)
+                                //.listRowBackground(main3)
                             }
                         }
                         
@@ -72,8 +81,10 @@ struct ContentView: View {
             }.navigationBarTitle("Activities", displayMode: .inline)
                 .background(main3)
                 .foregroundColor(main1)
+                .foregroundColor(Color(UIColor.white))
             
         }.foregroundColor(main1)
+        
     }
     
     private func groupActivities() -> [(String, [Activity])] {
@@ -145,6 +156,70 @@ struct ContentView: View {
             }
         }
     }
+    
+    private func duplicateActivityIncomplete(activity: Activity){
+        withAnimation {
+            var ct: Int = 0
+            let activityCopy = Activity(context: viewContext)
+            activityCopy.title = activity.title
+            PersistenceController.shared.saveContext()
+            for a in activities {
+                if ct == 0 && a.title == activity.title && a.date == activity.date && a.items == activity.items {
+                    for i in a.itemsArray {
+                        let itemCopy = Item(context: viewContext)
+                        itemCopy.title = i.title
+                        itemCopy.activityTitle = i.activityTitle
+                        activityCopy.addToItems(itemCopy)
+                        PersistenceController.shared.saveContext()
+                    }
+                    for l in a.linkItemsArray {
+                        let linkItemCopy = LinkItem(context: viewContext)
+                        linkItemCopy.title = l.title
+                        linkItemCopy.link = l.link
+                        activityCopy.addToLinkitems(linkItemCopy)
+                        PersistenceController.shared.saveContext()
+                    }
+                    
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
+            }
+        }
+    }
+    
+    private func duplicateActivityComplete(activity: Activity){
+        withAnimation {
+            var ct: Int = 0
+            let activityCopy = Activity(context: viewContext)
+            activityCopy.title = activity.title
+            PersistenceController.shared.saveContext()
+            for a in activities {
+                if ct == 0 && a.title == activity.title && a.date == activity.date && a.items == activity.items {
+                    for i in a.itemsArray {
+                        if !i.check {
+                        let itemCopy = Item(context: viewContext)
+                        itemCopy.title = i.title
+                        itemCopy.activityTitle = i.activityTitle
+                        activityCopy.addToItems(itemCopy)
+                        PersistenceController.shared.saveContext()
+                        }
+                    }
+                    for l in a.linkItemsArray {
+                        let linkItemCopy = LinkItem(context: viewContext)
+                        linkItemCopy.title = l.title
+                        linkItemCopy.link = l.link
+                        activityCopy.addToLinkitems(linkItemCopy)
+                        PersistenceController.shared.saveContext()
+                    }
+                    
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
+            }
+        }
+    }
+    
+    
     
     private func addActivity() {
         withAnimation {

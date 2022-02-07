@@ -107,7 +107,7 @@ struct ReadActivityView: View {
         let items: Dictionary = Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})
         var listItems = [(String?,[Item])]()
         let strs = items.keys.compactMap {
-            $0!
+            $0
         }
         for key in strs.sorted() {
             listItems.append((key, items[key]!))
