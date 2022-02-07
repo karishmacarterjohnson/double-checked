@@ -104,15 +104,19 @@ struct ReadActivityView: View {
     }
     
     private func groupItems() -> [(String?,[Item])] {
-        let items: Dictionary = Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})
+        var items: Dictionary = Dictionary(grouping: activity.itemsArray, by: {$0.activityTitle})
+        let current: [Item]? = items[activity.unwrappedTitle]
+        items.removeValue(forKey: activity.unwrappedTitle)
         var listItems = [(String?,[Item])]()
         let strs = items.keys.compactMap {
             $0
         }
+        listItems.append((activity.unwrappedTitle, current!))
         for key in strs.sorted() {
             listItems.append((key, items[key]!))
         }
         // show current one first
+        
         return listItems
         
     }
