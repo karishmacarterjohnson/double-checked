@@ -17,7 +17,7 @@ struct SearchBar: View {
             List {
                 ForEach(searchResults(), id: \.self.0) { index, activity, match in
                     NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
-                        VStack {
+                        VStack(alignment: .leading) {
                             Text(activity.unwrappedTitle)
                             Text(match).font(.caption)
                         }

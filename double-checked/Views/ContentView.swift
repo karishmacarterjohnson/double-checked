@@ -25,16 +25,16 @@ struct ContentView: View {
     
     var body: some View {
         //Menu()
-
+        
         NavigationView{
-//            SearchBar(activities: activities)
+            //            SearchBar(activities: activities)
             
             VStack {
                 
                 List {
                     ForEach(searchResults(), id: \.self.0) { index, activity, match in
                         NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
-                            VStack {
+                            VStack(alignment: .leading) {
                                 Text(activity.unwrappedTitle)
                                 Text(match).font(.caption)
                             }
@@ -95,7 +95,7 @@ struct ContentView: View {
             
         }.foregroundColor(main1)
             .searchable(text: $searchText)
-            
+        
     }
     
     private func groupActivities() -> [(String, [Activity])] {
@@ -233,11 +233,11 @@ struct ContentView: View {
                 if ct == 0 && a.title == activity.title && a.date == activity.date && a.items == activity.items {
                     for i in a.itemsArray {
                         if !i.check {
-                        let itemCopy = Item(context: viewContext)
-                        itemCopy.title = i.title
-                        itemCopy.activityTitle = i.activityTitle
-                        activityCopy.addToItems(itemCopy)
-                        PersistenceController.shared.saveContext()
+                            let itemCopy = Item(context: viewContext)
+                            itemCopy.title = i.title
+                            itemCopy.activityTitle = i.activityTitle
+                            activityCopy.addToItems(itemCopy)
+                            PersistenceController.shared.saveContext()
                         }
                     }
                     for l in a.linkItemsArray {

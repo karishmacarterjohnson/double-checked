@@ -15,7 +15,7 @@ struct ActivityLinks: View {
     @State var itemLink: String = ""
     @State var showTextField: Bool = false
     @State private var showingAlert = false
-
+    
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -30,11 +30,11 @@ struct ActivityLinks: View {
                         }
                     }
                     .alert(isPresented: $showingAlert) {
-                    Alert(
-                        title: Text("Error"),
-                        message: Text("Invalid url. Try adding 'http://' to the beginning if you think this is a mistake."),
-                        dismissButton: .default(Text("ok"))
-                    )
+                        Alert(
+                            title: Text("Error"),
+                            message: Text("Invalid url. Try adding 'http://' to the beginning if you think this is a mistake."),
+                            dismissButton: .default(Text("ok"))
+                        )
                     }
                     .frame(maxWidth: 160)
                     //.frame(maxWidth: UIScreen.main.bounds.size.width)
@@ -89,7 +89,7 @@ struct ActivityLinks: View {
                     
                 } catch {
                     showingAlert = true
-
+                    
                 }
                 
                 
