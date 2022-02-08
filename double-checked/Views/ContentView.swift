@@ -21,11 +21,27 @@ struct ContentView: View {
     private var main1: Color = Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255)
     private var main2: Color = Color(red: 255 / 255, green: 100 / 255, blue: 160 / 255)
     private var main3: Color = Color(red: 255 / 255, green: 193 / 255, blue: 125 / 255)
+    @State private var searchText: String = ""
     
     var body: some View {
         //Menu()
+
         NavigationView{
+//            SearchBar(activities: activities)
+            
             VStack {
+                
+                List {
+                    ForEach(searchResults(), id: \.self.0) { index, activity, match in
+                        NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
+                            VStack {
+                                Text(activity.unwrappedTitle)
+                                Text(match).font(.caption)
+                            }
+                        }
+                        
+                    }
+                }
                 HStack {
                     TextField("Activity Name", text: $activityTitle)
                         .textFieldStyle(.roundedBorder)
@@ -66,25 +82,20 @@ struct ContentView: View {
                                     Button(action: {duplicateActivityIncomplete(activity: activity)}) {
                                         Label("", systemImage: "doc.on.doc.fill")
                                     }
-                                    
-                                   
                                 }
-                                .listRowSeparator(.hidden)
-                                
-                                //.listRowBackground(main3)
+                                .listRowSeparator(.hidden)//.listRowBackground(main3)
                             }
                         }
-                        
                     }
                 }.listStyle(SidebarListStyle())
-                
             }.navigationBarTitle("Activities", displayMode: .inline)
                 .background(main3)
                 .foregroundColor(main1)
                 .foregroundColor(Color(UIColor.white))
             
         }.foregroundColor(main1)
-        
+            .searchable(text: $searchText)
+            
     }
     
     private func groupActivities() -> [(String, [Activity])] {
@@ -137,6 +148,31 @@ struct ContentView: View {
             }
         }
         return checkedCount
+    }
+    
+    private func searchResults() -> [(Int, Activity, String)] {
+        var matches = [(Int, Activity, String)]()
+        var index: Int = 0
+        for activity in activities {
+            if activity.unwrappedTitle.localizedCaseInsensitiveContains(searchText) {
+                matches.append((index, activity, activity.unwrappedTitle))
+                index += 1
+            }
+            for i in activity.itemsArray {
+                if i.unwrappedTitle.localizedCaseInsensitiveContains(searchText) {
+                    matches.append((index, activity, i.unwrappedTitle))
+                    index += 1
+                }
+            }
+            for l in activity.linkItemsArray {
+                if l.unwrappedTitle.localizedCaseInsensitiveContains(searchText) {
+                    matches.append((index, activity, l.unwrappedTitle))
+                    index += 1
+                }
+            }
+        }
+        
+        return matches
     }
     
     private func progressValue(activity: Activity) -> Float {
