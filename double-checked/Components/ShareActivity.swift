@@ -17,14 +17,12 @@ struct ShareActivity: View {
     @StateObject var activity: Activity
     
     var body: some View {
-        Text(createShare() ?? "")
+        Button(action: {UIPasteboard.general.string = createShare()}) {
+            Label("", systemImage: "square.and.arrow.up")
+        }
         
-//        Button(action: createShare){
-//            Label("", systemImage: "square.and.arrow.up")
-//        }
     }
     private func createShare() -> String? {
-        // sharing reduced list data
         var shareItems = [[String]]()
         for i in activity.itemsArray {
             shareItems.append([i.unwrappedTitle, i.unwrappedActivityTitle])
@@ -34,18 +32,13 @@ struct ShareActivity: View {
             shareLinkItems.append([l.unwrappedTitle, l.unwrappedLink])
         }
         
-        // create it
         let activityToShare = ActivityShared(title: activity.unwrappedTitle, date: activity.date, items:shareItems, linkItems: shareLinkItems)
         
         let jsonData = try! JSONEncoder().encode(activityToShare)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
         
         let jsonString = json?.data(using: .utf8)?.base64EncodedString() ?? ""
-        // return jsonString
         
-//        var activityURL = URLComponents()
-//        activityURL.scheme = "doublechecked"
-//        activityURL.path = "//" + jsonString
         let activityURL = "doublechecked://" + jsonString
         return activityURL
     }
@@ -53,3 +46,9 @@ struct ShareActivity: View {
 
 
 // https://www.twilio.com/blog/working-with-json-in-swift
+// return jsonString
+
+//        https://www.advancedswift.com/a-guide-to-urls-in-swift/#create-url-string
+//        var activityURL = URLComponents()
+//        activityURL.scheme = "doublechecked"
+//        activityURL.path = "//" + jsonString
