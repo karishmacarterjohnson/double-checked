@@ -24,6 +24,7 @@ struct ActivityLinks: View {
                 if showTextField {
                     HStack {
                         TextField("add link", text: $itemLink)
+                            .modifier(TextFieldClearButton(text: $itemLink))
                             .textFieldStyle(.roundedBorder)
                         Button(action: addLinkItem) {
                             Label("", systemImage:"plus")

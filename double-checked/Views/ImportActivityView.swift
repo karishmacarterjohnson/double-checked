@@ -10,7 +10,6 @@ import SwiftUI
 struct ImportActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    
     @StateObject var activity: Activity
 
     var body: some View {
@@ -41,7 +40,7 @@ struct ImportActivityView: View {
     
     private func cancelSaveActivity() {
         // go back to main view??
-        // maybe just make the button a navlink
+
     }
     
     private func saveActivity() {

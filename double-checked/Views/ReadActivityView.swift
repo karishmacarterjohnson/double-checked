@@ -10,17 +10,14 @@ import SwiftUI
 struct ReadActivityView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    
     @StateObject var activity: Activity
     @State var activityArray: FetchedResults<Activity>
-    
-//    @State private var itemTitles = Dictionary<String?,String>()
     @State private var itemTitle: String = ""
     @State private var selectedActivity = ""
     
-    /////////////////////////////////////////////
-    
     var body: some View {
+        ShareActivity(activity: activity)
+//        ImportActivity()
         VStack {
             ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.horizontal)
             HStack {
@@ -36,6 +33,7 @@ struct ReadActivityView: View {
             }.padding(.horizontal).padding(.top)
             HStack {
                 TextField("Item title", text: $itemTitle)
+                    .modifier(TextFieldClearButton(text: $itemTitle))
                     .textFieldStyle(.roundedBorder)
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
@@ -53,7 +51,7 @@ struct ReadActivityView: View {
                     }
                     
                 }
-            }//.listStyle(PlainListStyle())
+            }
             Button(action: resetActivity) {
                 Label("Reset", systemImage: "")
             }
@@ -111,12 +109,12 @@ struct ReadActivityView: View {
         let strs = items.keys.compactMap {
             $0
         }
-        listItems.append((activity.unwrappedTitle, current!))
+        if (current != nil) {
+            listItems.append((activity.unwrappedTitle, current!))
+        }
         for key in strs.sorted() {
             listItems.append((key, items[key]!))
         }
-        // show current one first
-        
         return listItems
         
     }

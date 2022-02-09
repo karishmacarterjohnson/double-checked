@@ -27,8 +27,10 @@ struct ContentView: View {
             VStack {
                 HStack {
                     TextField("Activity Name", text: $activityTitle)
-                        .textFieldStyle(.roundedBorder)
+                        .modifier(TextFieldClearButton(text: $activityTitle))
                         .foregroundColor(main2)
+                        .textFieldStyle(.roundedBorder)
+                        
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
