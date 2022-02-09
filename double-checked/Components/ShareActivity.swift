@@ -39,8 +39,15 @@ struct ShareActivity: View {
         
         let jsonData = try! JSONEncoder().encode(activityToShare)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
-
-        return json?.data(using: .utf8)?.base64EncodedString()
+        
+        let jsonString = json?.data(using: .utf8)?.base64EncodedString() ?? ""
+        // return jsonString
+        
+//        var activityURL = URLComponents()
+//        activityURL.scheme = "doublechecked"
+//        activityURL.path = "//" + jsonString
+        let activityURL = "doublechecked://" + jsonString
+        return activityURL
     }
 }
 
