@@ -12,7 +12,6 @@
 		6E1C515E27A0E1FE0002CDBF /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1C515A27A0E1FE0002CDBF /* Item+CoreDataProperties.swift */; };
 		6E25076227B302D000C91D3A /* ShareActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E25076127B302D000C91D3A /* ShareActivity.swift */; };
 		6E25076427B3043E00C91D3A /* ImportActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E25076327B3043E00C91D3A /* ImportActivity.swift */; };
-		6E25076727B415FB00C91D3A /* ImportActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E25076627B415FA00C91D3A /* ImportActivityView.swift */; };
 		6E25076927B43BD900C91D3A /* ClearTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E25076827B43BD900C91D3A /* ClearTextButton.swift */; };
 		6E3BC8F9279F4EE40098A4F7 /* double_checkedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC8F8279F4EE40098A4F7 /* double_checkedApp.swift */; };
 		6E3BC8FB279F4EE40098A4F7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3BC8FA279F4EE40098A4F7 /* ContentView.swift */; };
@@ -40,7 +39,6 @@
 		6E25076127B302D000C91D3A /* ShareActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareActivity.swift; sourceTree = "<group>"; };
 		6E25076327B3043E00C91D3A /* ImportActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportActivity.swift; sourceTree = "<group>"; };
 		6E25076527B4115D00C91D3A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		6E25076627B415FA00C91D3A /* ImportActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportActivityView.swift; sourceTree = "<group>"; };
 		6E25076827B43BD900C91D3A /* ClearTextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTextButton.swift; sourceTree = "<group>"; };
 		6E3BC8F5279F4EE40098A4F7 /* double-checked.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "double-checked.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E3BC8F8279F4EE40098A4F7 /* double_checkedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = double_checkedApp.swift; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 			children = (
 				6E3BC90D279F5A7C0098A4F7 /* UpdateActivityView.swift */,
 				6E3BC913279F5E290098A4F7 /* ReadActivityView.swift */,
-				6E25076627B415FA00C91D3A /* ImportActivityView.swift */,
 				6E3BC8FA279F4EE40098A4F7 /* ContentView.swift */,
 			);
 			path = Views;
@@ -243,7 +240,6 @@
 				6E623E9B27AB4E2000774BFB /* Activity+CoreDataProperties.swift in Sources */,
 				6E623E9327AB487800774BFB /* LinkItem+CoreDataProperties.swift in Sources */,
 				6E623E8727AB190600774BFB /* NewItemField.swift in Sources */,
-				6E25076727B415FB00C91D3A /* ImportActivityView.swift in Sources */,
 				6E623E8B27AB23FB00774BFB /* ItemCheck.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

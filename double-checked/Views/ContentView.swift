@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var prevActivity: Bool = false
+    @State private var newImport: Activity?
     
     @State private var activityTitle: String = ""
     
@@ -24,13 +26,41 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView{
+            
+            if prevActivity {
+                /////////////////////////////////////// import
+                VStack {
+                    ActivityLinks(activity: newImport!)
+                    
+                    List {
+                        ForEach(groupItems(), id:\.self.0){ activityName, items in
+                            Section(header: Text(activityName ?? "")){
+                                ForEach(items) { item in
+                                    Checked(activity: newImport!, item: item)
+                                }
+                            }
+                        }
+                    }
+                    Button(action: saveActivity) {
+                        Label("Save", systemImage: "")
+                    }
+                    Button(action: {prevActivity = false
+//                        previewActivity.status = false    
+                    }) {Label("Close", systemImage:"")}
+                }.navigationBarTitle(newImport!.unwrappedTitle)
+                
+                
+                ////////////////////////////////////////// import
+                
+            }
+            else { /////////////////////////////////////// default
             VStack {
                 HStack {
                     TextField("Activity Name", text: $activityTitle)
                         .modifier(TextFieldClearButton(text: $activityTitle))
                         .foregroundColor(main2)
                         .textFieldStyle(.roundedBorder)
-                        
+                    
                     Button(action: addActivity) {
                         Label("", systemImage: "plus")
                     }
@@ -73,15 +103,49 @@ struct ContentView: View {
                         }
                     }
                 }.listStyle(SidebarListStyle())
+                
+                
             }.navigationBarTitle("Activities", displayMode: .inline)
-
+            
                 .background(main3)
                 .foregroundColor(main1)
                 .foregroundColor(Color(UIColor.white))
                 .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {Text(Image(systemName: "search"))})
+            /////////////////////////////////////// default
+            }
             
         }.foregroundColor(main1)
+            .onOpenURL(perform: {url in
+                prevActivity = true
+                newImport = importActivityAsObject(link: url.absoluteString)
+            })
         
+    }
+    
+    private func importActivityAsObject(link: String) -> Activity {
+        let b64 = String(link.dropFirst("doublechecked://".count))
+        let data = Data(base64Encoded: b64)
+        let b64Decoded = String(data: data!, encoding: .utf8) // string of json
+        let jsonData = (b64Decoded?.data(using:.utf8))! // string
+        let attempt = try! JSONDecoder().decode(ActivityShared.self, from: jsonData)  // ActivityShared struct
+//        return "nice, v"
+        let importedActivity = Activity(context: viewContext)
+        importedActivity.title = attempt.title
+        importedActivity.date = attempt.date
+        for i in attempt.items {
+            let itemCopy = Item(context: viewContext)
+            itemCopy.title = i[0]
+            itemCopy.activityTitle = i[1]
+            importedActivity.addToItems(itemCopy)
+        }
+        for l in attempt.linkItems {
+            let linkItemCopy = LinkItem(context: viewContext)
+            linkItemCopy.title = l[0]
+            linkItemCopy.link = l[1]
+            importedActivity.addToLinkitems(linkItemCopy)
+        }
+        return importedActivity
+
     }
     
     private func groupActivities() -> [(String, [Activity])] {
@@ -227,6 +291,30 @@ struct ContentView: View {
                 PersistenceController.shared.saveContext()
             }
         }
+    }
+    
+    
+    ///////////////////// import
+    ///
+    private func saveActivity() {
+        PersistenceController.shared.saveContext()
+    }
+    
+    private func groupItems() -> [(String?,[Item])] {
+        //        let activity = activity
+        var items: Dictionary = Dictionary(grouping: newImport!.itemsArray, by: {$0.activityTitle})
+        let current: [Item]? = items[newImport!.unwrappedTitle]
+        items.removeValue(forKey: newImport!.unwrappedTitle)
+        var listItems = [(String?,[Item])]()
+        let strs = items.keys.compactMap {
+            $0
+        }
+        listItems.append((newImport!.unwrappedTitle, current!))
+        for key in strs.sorted() {
+            listItems.append((key, items[key]!))
+        }
+        return listItems
+        
     }
     
 }
