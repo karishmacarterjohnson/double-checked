@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var prevActivity: Bool = false
@@ -26,7 +25,6 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView{
-            
             if prevActivity {
                 /////////////////////////////////////// import
                 VStack {
@@ -45,73 +43,71 @@ struct ContentView: View {
                         Label("Save", systemImage: "")
                     }
                     Button(action: {prevActivity = false
-//                        previewActivity.status = false    
                     }) {Label("Close", systemImage:"")}
                 }.navigationBarTitle(newImport!.unwrappedTitle)
-                
                 
                 ////////////////////////////////////////// import
                 
             }
             else { /////////////////////////////////////// default
-            VStack {
-                HStack {
-                    TextField("Activity Name", text: $activityTitle)
-                        .modifier(TextFieldClearButton(text: $activityTitle))
-                        .foregroundColor(main2)
-                        .textFieldStyle(.roundedBorder)
+                VStack {
+                    HStack {
+                        TextField("Activity Name", text: $activityTitle)
+                            .modifier(TextFieldClearButton(text: $activityTitle))
+                            .foregroundColor(main2)
+                            .textFieldStyle(.roundedBorder)
+                        
+                        Button(action: addActivity) {
+                            Label("", systemImage: "plus")
+                        }
+                    }.padding(4).padding(.horizontal)
                     
-                    Button(action: addActivity) {
-                        Label("", systemImage: "plus")
-                    }
-                }.padding(4).padding(.horizontal)
-                
-                List {
-                    ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
-                        Section(header: Text(group)
-                                    .foregroundColor(main1)
-                                    .font(.body)
-                                    .textCase(.uppercase)) {
-                            ForEach(activitiesArray, id:\.self.title) {activity in
-                                NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
-                                    VStack {
-                                        HStack (alignment: .firstTextBaseline) {
-                                            Text(activity.title ?? "")
-                                            Spacer()
-                                            Text(activity.unwrappedDate)
-                                                .fontWeight(.light)
-                                                .font(.caption)
-                                            
-                                        }.foregroundColor(main1)
-                                            .font(.body)
-                                        ProgressBar(value: progressValue(activity: activity)).frame(height:4)
+                    List {
+                        ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
+                            Section(header: Text(group)
+                                        .foregroundColor(main1)
+                                        .font(.body)
+                                        .textCase(.uppercase)) {
+                                ForEach(activitiesArray, id:\.self.title) {activity in
+                                    NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
+                                        VStack {
+                                            HStack (alignment: .firstTextBaseline) {
+                                                Text(activity.title ?? "")
+                                                Spacer()
+                                                Text(activity.unwrappedDate)
+                                                    .fontWeight(.light)
+                                                    .font(.caption)
+                                                
+                                            }.foregroundColor(main1)
+                                                .font(.body)
+                                            ProgressBar(value: progressValue(activity: activity)).frame(height:4)
+                                        }
+                                        
+                                    }.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                        Button( action: {deleteActivity(activity: activity)}) {
+                                            Label("", systemImage: "trash")
+                                        }
+                                        Button(action: {duplicateActivityComplete(activity: activity)}) {
+                                            Label("", systemImage: "doc.on.doc")
+                                        }
+                                        Button(action: {duplicateActivityIncomplete(activity: activity)}) {
+                                            Label("", systemImage: "doc.on.doc.fill")
+                                        }
                                     }
-                                    
-                                }.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button( action: {deleteActivity(activity: activity)}) {
-                                        Label("", systemImage: "trash")
-                                    }
-                                    Button(action: {duplicateActivityComplete(activity: activity)}) {
-                                        Label("", systemImage: "doc.on.doc")
-                                    }
-                                    Button(action: {duplicateActivityIncomplete(activity: activity)}) {
-                                        Label("", systemImage: "doc.on.doc.fill")
-                                    }
+                                    .listRowSeparator(.hidden)
                                 }
-                                .listRowSeparator(.hidden)//.listRowBackground(main3)
                             }
                         }
-                    }
-                }.listStyle(SidebarListStyle())
+                    }.listStyle(SidebarListStyle())
+                    
+                    
+                }.navigationBarTitle("Activities", displayMode: .inline)
                 
-                
-            }.navigationBarTitle("Activities", displayMode: .inline)
-            
-                .background(main3)
-                .foregroundColor(main1)
-                .foregroundColor(Color(UIColor.white))
-                .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {Text(Image(systemName: "search"))})
-            /////////////////////////////////////// default
+                    .background(main3)
+                    .foregroundColor(main1)
+                    .foregroundColor(Color(UIColor.white))
+                    .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {Text(Image(systemName: "search"))})
+                /////////////////////////////////////// default
             }
             
         }.foregroundColor(main1)
@@ -122,31 +118,6 @@ struct ContentView: View {
         
     }
     
-    private func importActivityAsObject(link: String) -> Activity {
-        let b64 = String(link.dropFirst("doublechecked://".count))
-        let data = Data(base64Encoded: b64)
-        let b64Decoded = String(data: data!, encoding: .utf8) // string of json
-        let jsonData = (b64Decoded?.data(using:.utf8))! // string
-        let attempt = try! JSONDecoder().decode(ActivityShared.self, from: jsonData)  // ActivityShared struct
-//        return "nice, v"
-        let importedActivity = Activity(context: viewContext)
-        importedActivity.title = attempt.title
-        importedActivity.date = attempt.date
-        for i in attempt.items {
-            let itemCopy = Item(context: viewContext)
-            itemCopy.title = i[0]
-            itemCopy.activityTitle = i[1]
-            importedActivity.addToItems(itemCopy)
-        }
-        for l in attempt.linkItems {
-            let linkItemCopy = LinkItem(context: viewContext)
-            linkItemCopy.title = l[0]
-            linkItemCopy.link = l[1]
-            importedActivity.addToLinkitems(linkItemCopy)
-        }
-        return importedActivity
-
-    }
     
     private func groupActivities() -> [(String, [Activity])] {
         var groupActivities = [String:[Activity]]()
@@ -316,6 +287,32 @@ struct ContentView: View {
         return listItems
         
     }
+    
+    private func importActivityAsObject(link: String) -> Activity {
+        let b64 = String(link.dropFirst("doublechecked://".count))
+        let data = Data(base64Encoded: b64)
+        let b64Decoded = String(data: data!, encoding: .utf8) // string of json
+        let jsonData = (b64Decoded?.data(using:.utf8))! // string
+        let attempt = try! JSONDecoder().decode(ActivityShared.self, from: jsonData)  // ActivityShared struct
+        let importedActivity = Activity(context: viewContext)
+        importedActivity.title = attempt.title
+        importedActivity.date = attempt.date
+        for i in attempt.items {
+            let itemCopy = Item(context: viewContext)
+            itemCopy.title = i[0]
+            itemCopy.activityTitle = i[1]
+            importedActivity.addToItems(itemCopy)
+        }
+        for l in attempt.linkItems {
+            let linkItemCopy = LinkItem(context: viewContext)
+            linkItemCopy.title = l[0]
+            linkItemCopy.link = l[1]
+            importedActivity.addToLinkitems(linkItemCopy)
+        }
+        return importedActivity
+        
+    }
+    
     
 }
 
