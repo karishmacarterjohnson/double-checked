@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UpdateActivityView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    
     @StateObject var activity: Activity
     
     @State private var activityTitle: String = ""
@@ -48,13 +50,17 @@ struct UpdateActivityView: View {
                     }
                 }
                 
+                
             }
             
-            // section selection button to import other activities
+            Button(action: resetActivity) {
+                Label("Reset", systemImage: "")
+            }.padding(.horizontal)
             
         }
         
     }
+    
     
     private func updateActivityTitle() {
         withAnimation {
@@ -72,6 +78,32 @@ struct UpdateActivityView: View {
         withAnimation {
             activity.date = nil
             PersistenceController.shared.saveContext()
+        }
+    }
+    
+    private func resetActivity() {
+        for i in activity.itemsArray {
+            if i.check == true {
+                toggleCheck(item: i)
+            }
+        }
+    }
+    
+    private func toggleCheck(item: Item) {
+        withAnimation {
+            var ct: Int = 0
+            let newItem = Item(context: viewContext)
+            for i in activity.itemsArray {
+                if ct == 0 && item.title == i.title && item.activityTitle == i.activityTitle {
+                    newItem.title = item.title
+                    newItem.activityTitle = item.activityTitle
+                    newItem.check = !item.check
+                    activity.addToItems(newItem)
+                    viewContext.delete(i)
+                    ct += 1
+                    PersistenceController.shared.saveContext()
+                }
+            }
         }
     }
     

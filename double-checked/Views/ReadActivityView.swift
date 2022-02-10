@@ -17,7 +17,6 @@ struct ReadActivityView: View {
     
     var body: some View {
         ShareActivity(activity: activity)
-//        ImportActivity()
         VStack {
             ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.horizontal)
             HStack {
@@ -52,9 +51,7 @@ struct ReadActivityView: View {
                     
                 }
             }
-            Button(action: resetActivity) {
-                Label("Reset", systemImage: "")
-            }
+            
         }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
@@ -144,13 +141,7 @@ struct ReadActivityView: View {
         return Float(Double(checkedCount) / Double(total))
     }
     
-    private func resetActivity() {
-        for i in activity.itemsArray {
-            if i.check == true {
-                toggleCheck(item: i)
-            }
-        }
-    }
+
     
     struct ReadActivityView_Previews: PreviewProvider {
         static var previews: some View {
