@@ -74,6 +74,7 @@ struct ContentView: View {
                     }
                 }.listStyle(SidebarListStyle())
             }.navigationBarTitle("Activities", displayMode: .inline)
+
                 .background(main3)
                 .foregroundColor(main1)
                 .foregroundColor(Color(UIColor.white))
