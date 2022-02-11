@@ -110,7 +110,7 @@ struct ContentView: View {
                 .background(main3)
                 .foregroundColor(main1)
                 .foregroundColor(Color(UIColor.white))
-                .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {Text(Image(systemName: "search"))})
+                .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {Text(Image("search"))})
             /////////////////////////////////////// default
             }
             
