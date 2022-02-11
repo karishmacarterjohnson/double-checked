@@ -16,7 +16,6 @@ struct ReadActivityView: View {
     @State private var selectedActivity = ""
     
     var body: some View {
-        ShareActivity(activity: activity)
         VStack {
             ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.horizontal)
             HStack {
@@ -51,7 +50,18 @@ struct ReadActivityView: View {
                 }
             }
             
-        }.navigationBarTitle(activity.unwrappedTitle) .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack {
+                    Text(activity.unwrappedTitle)
+                    ShareActivity(activity: activity)
+                }
+                
+            }
+        }
+            
+            .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
     private func importActivity() {
