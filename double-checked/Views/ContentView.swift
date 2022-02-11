@@ -28,7 +28,27 @@ struct ContentView: View {
             if prevActivity {
                 /////////////////////////////////////// import
                 VStack {
-                    ActivityLinks(activity: newImport!)
+                    ScrollView(.horizontal) {
+                        
+                        HStack {
+                        
+                            ForEach(newImport!.linkItemsArray) { linkitem in
+                                
+                                Link(destination: URL(string: linkitem.unwrappedLink)!) {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(linkitem.unwrappedTitle)
+                                            Text(linkitem.unwrappedLink)
+                                                .font(.caption)
+                                        }.frame(maxWidth: 160)
+                                        Image(systemName: "link.circle.fill")
+                                            .font(.largeTitle)
+                                    }
+                                   
+                                }
+                            }.padding()
+                        }
+                    }.frame(height: 100).padding(.horizontal)
                     
                     List {
                         ForEach(groupItems(), id:\.self.0){ activityName, items in
