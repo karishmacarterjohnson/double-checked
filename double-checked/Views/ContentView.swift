@@ -59,6 +59,7 @@ struct ContentView: View {
                             }
                         }
                     }
+                    HStack {
                     Button(action: {prevActivity = false}) {
                         Label("Save", systemImage: "")
                     }
@@ -68,6 +69,7 @@ struct ContentView: View {
                         
                         
                     }) {Label("Close", systemImage:"")}
+                    }
                 }.navigationBarTitle(newImport!.unwrappedTitle)
                 
                 ////////////////////////////////////////// import
