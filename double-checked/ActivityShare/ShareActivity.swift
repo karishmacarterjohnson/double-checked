@@ -14,10 +14,13 @@ struct ActivityShared: Codable {
 
 struct ShareActivity: View {
     @StateObject var activity: Activity
+    @State private var linkCopied: Bool = false
     
     var body: some View {
         Button(action: {UIPasteboard.general.string = createShare()}) {
             Label("", systemImage: "square.and.arrow.up")
+        }.alert("Link Copied", isPresented: $linkCopied) {
+            Button("thank you", role:.cancel, action: {linkCopied = false})
         }
         
     }
@@ -39,6 +42,7 @@ struct ShareActivity: View {
         let jsonString = json?.data(using: .utf8)?.base64EncodedString() ?? ""
         
         let activityURL = "doublechecked://" + jsonString
+        linkCopied = true
         return activityURL
     }
 }
