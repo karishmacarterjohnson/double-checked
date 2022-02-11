@@ -34,7 +34,7 @@ struct ContentView: View {
                         ForEach(groupItems(), id:\.self.0){ activityName, items in
                             Section(header: Text(activityName ?? "")){
                                 ForEach(items) { item in
-                                    Checked(activity: newImport!, item: item)
+                                    Text(item.unwrappedTitle)
                                 }
                             }
                         }
@@ -42,7 +42,11 @@ struct ContentView: View {
                     Button(action: saveActivity) {
                         Label("Save", systemImage: "")
                     }
-                    Button(action: {prevActivity = false
+                    Button(action: {
+                        prevActivity = false
+                        deleteActivity(activity: newImport!)
+                        
+                        
                     }) {Label("Close", systemImage:"")}
                 }.navigationBarTitle(newImport!.unwrappedTitle)
                 
