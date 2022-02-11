@@ -28,27 +28,29 @@ struct ContentView: View {
             if prevActivity {
                 /////////////////////////////////////// import
                 VStack {
-                    ScrollView(.horizontal) {
-                        
-                        HStack {
-                        
-                            ForEach(newImport!.linkItemsArray) { linkitem in
+                    if newImport!.linkItemsArray.count != 0 {
+                        ScrollView(.horizontal) {
+                            
+                            HStack {
                                 
-                                Link(destination: URL(string: linkitem.unwrappedLink)!) {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(linkitem.unwrappedTitle)
-                                            Text(linkitem.unwrappedLink)
-                                                .font(.caption)
-                                        }.frame(maxWidth: 160)
-                                        Image(systemName: "link.circle.fill")
-                                            .font(.largeTitle)
+                                ForEach(newImport!.linkItemsArray) { linkitem in
+                                    
+                                    Link(destination: URL(string: linkitem.unwrappedLink)!) {
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(linkitem.unwrappedTitle)
+                                                Text(linkitem.unwrappedLink)
+                                                    .font(.caption)
+                                            }.frame(maxWidth: 160)
+                                            Image(systemName: "link.circle.fill")
+                                                .font(.largeTitle)
+                                        }
+                                        
                                     }
-                                   
-                                }
-                            }.padding()
-                        }
-                    }.frame(height: 100).padding(.horizontal)
+                                }.padding()
+                            }
+                        }.frame(height: 100).padding(.horizontal)
+                    }
                     
                     List {
                         ForEach(groupItems(), id:\.self.0){ activityName, items in
@@ -60,15 +62,15 @@ struct ContentView: View {
                         }
                     }
                     HStack {
-                    Button(action: {prevActivity = false}) {
-                        Label("Save", systemImage: "")
-                    }
-                    Button(action: {
-                        prevActivity = false
-                        deleteActivity(activity: newImport!)
-                        
-                        
-                    }) {Label("Close", systemImage:"")}
+                        Button(action: {prevActivity = false}) {
+                            Label("Save", systemImage: "")
+                        }
+                        Button(action: {
+                            prevActivity = false
+                            deleteActivity(activity: newImport!)
+                            
+                            
+                        }) {Label("Close", systemImage:"")}
                     }
                 }.navigationBarTitle(newImport!.unwrappedTitle)
                 
@@ -135,7 +137,7 @@ struct ContentView: View {
                         Text(
                             Image("search")
                         )
-
+                        
                     }
                     )
                 /////////////////////////////////////// default

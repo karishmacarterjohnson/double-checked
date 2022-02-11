@@ -20,9 +20,13 @@ struct NewItemField: View {
             TextField("Add " + activityName + " Item", text: $itemTitle)
                 .textFieldStyle(.roundedBorder)
             Spacer()
+            Button(action: {itemTitle = ""}) {
+                Label("", systemImage: "delete.left")
+            }.buttonStyle(PlainButtonStyle())
+            
             Button(action: addItem) {
                 Label("", systemImage: "plus")
-            }
+            }.buttonStyle(PlainButtonStyle())
         }.padding(.horizontal)
     }
     
