@@ -53,7 +53,6 @@ struct ContentView: View {
                 VStack {
                     HStack {
                         TextField("Activity Name", text: $activityTitle)
-                            .modifier(TextFieldClearButton(text: $activityTitle))
                             .foregroundColor(main2)
                             .textFieldStyle(.roundedBorder)
                         

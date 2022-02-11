@@ -32,7 +32,6 @@ struct ReadActivityView: View {
             }.padding(.horizontal).padding(.top)
             HStack {
                 TextField("Item title", text: $itemTitle)
-                    .modifier(TextFieldClearButton(text: $itemTitle))
                     .textFieldStyle(.roundedBorder)
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
