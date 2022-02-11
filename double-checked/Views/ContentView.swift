@@ -308,7 +308,9 @@ struct ContentView: View {
         let strs = items.keys.compactMap {
             $0
         }
-        listItems.append((newImport!.unwrappedTitle, current!))
+        if (current != nil) {
+            listItems.append((newImport!.unwrappedTitle, current!))
+        }
         for key in strs.sorted() {
             listItems.append((key, items[key]!))
         }
