@@ -39,7 +39,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    Button(action: saveActivity) {
+                    Button(action: {prevActivity = false}) {
                         Label("Save", systemImage: "")
                     }
                     Button(action: {
@@ -276,9 +276,6 @@ struct ContentView: View {
     
     ///////////////////// import
     ///
-    private func saveActivity() {
-        PersistenceController.shared.saveContext()
-    }
     
     private func groupItems() -> [(String?,[Item])] {
         //        let activity = activity
