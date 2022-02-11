@@ -90,7 +90,7 @@ struct ReadActivityView: View {
         var activityTitles = [String]()
         activityTitles.append("Choose Activity")
         for act in activitiesList {
-            if act.unwrappedTitle != activityTitle {
+            if (act.unwrappedTitle != activityTitle && act.itemsArray.count != 0) {
                 activityTitles.append(act.unwrappedTitle)
             }
         }
