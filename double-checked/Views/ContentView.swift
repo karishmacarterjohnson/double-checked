@@ -324,7 +324,6 @@ struct ContentView: View {
         let attempt = try! JSONDecoder().decode(ActivityShared.self, from: jsonData)  // ActivityShared struct
         let importedActivity = Activity(context: viewContext)
         importedActivity.title = attempt.title
-        importedActivity.date = attempt.date
         for i in attempt.items {
             let itemCopy = Item(context: viewContext)
             itemCopy.title = i[0]

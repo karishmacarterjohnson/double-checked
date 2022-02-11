@@ -8,7 +8,6 @@ import SwiftUI
 
 struct ActivityShared: Codable {
     var title: String?
-    var date: Date?
     var items: [[String?]]
     var linkItems: [[String?]]
 }
@@ -32,7 +31,7 @@ struct ShareActivity: View {
             shareLinkItems.append([l.unwrappedTitle, l.unwrappedLink])
         }
         
-        let activityToShare = ActivityShared(title: activity.unwrappedTitle, date: activity.date, items:shareItems, linkItems: shareLinkItems)
+        let activityToShare = ActivityShared(title: activity.unwrappedTitle, items:shareItems, linkItems: shareLinkItems)
         
         let jsonData = try! JSONEncoder().encode(activityToShare)
         let json = String(data: jsonData, encoding: String.Encoding.utf8)
