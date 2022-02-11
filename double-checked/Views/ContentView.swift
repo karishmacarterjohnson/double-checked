@@ -11,6 +11,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var prevActivity: Bool = false
     @State private var newImport: Activity?
+    @State private var invalidLink: Bool = false
     
     @State private var activityTitle: String = ""
     
@@ -145,9 +146,13 @@ struct ContentView: View {
             
         }.foregroundColor(main1)
             .onOpenURL(perform: {url in
-                prevActivity = true
                 newImport = importActivityAsObject(link: url.absoluteString)
-            })
+                if newImport != nil {
+                prevActivity = true
+                }
+            }).alert("invalid url", isPresented: $invalidLink) {
+                Button("ok", role:.cancel, action: {invalidLink = false})
+            }
         
     }
     
@@ -320,11 +325,12 @@ struct ContentView: View {
         
     }
     
-    private func importActivityAsObject(link: String) -> Activity {
+    private func importActivityAsObject(link: String) -> Activity? {
+
         let b64 = String(link.dropFirst("doublechecked://".count))
         let data = Data(base64Encoded: b64)
-        let b64Decoded = String(data: data!, encoding: .utf8) // string of json
-        let jsonData = (b64Decoded?.data(using:.utf8))! // string
+        guard let b64Decoded = String(data: data!, encoding: .utf8) else { invalidLink = true; return nil }
+        let jsonData = (b64Decoded.data(using:.utf8))! // string
         let attempt = try! JSONDecoder().decode(ActivityShared.self, from: jsonData)  // ActivityShared struct
         let importedActivity = Activity(context: viewContext)
         importedActivity.title = attempt.title
@@ -341,7 +347,7 @@ struct ContentView: View {
             importedActivity.addToLinkitems(linkItemCopy)
         }
         return importedActivity
-        
+
     }
     
     
