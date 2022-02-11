@@ -64,7 +64,14 @@ struct UpdateActivityView: View {
     
     private func updateActivityTitle() {
         withAnimation {
+            let prevTitle = activity.unwrappedTitle
             activity.title = activityTitle
+            for i in activity.itemsArray {
+                if i.unwrappedActivityTitle == prevTitle {
+                    i.activityTitle = activityTitle
+                }
+            }
+            
             PersistenceController.shared.saveContext()
         }
     }
