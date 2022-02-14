@@ -12,7 +12,7 @@ struct ContentView: View {
     @State private var prevActivity: Bool = false
     @State private var newImport: Activity?
     @State private var invalidLink: Bool = false
-    
+    @State private var isActive: Bool = false
     @State private var activityTitle: String = ""
     
     @FetchRequest(
@@ -26,6 +26,7 @@ struct ContentView: View {
     var body: some View {
         
         NavigationView{
+            if isActive {
             if prevActivity {
                 /////////////////////////////////////// import
                 VStack {
@@ -142,6 +143,9 @@ struct ContentView: View {
                     }
                     )
                 /////////////////////////////////////// default
+            }}
+            else {
+               Text("Double Check")
             }
             
         }.foregroundColor(main1)
@@ -153,6 +157,15 @@ struct ContentView: View {
             }).alert("invalid url", isPresented: $invalidLink) {
                 Button("ok", role:.cancel, action: {invalidLink = false})
             }
+            .onAppear {
+                        // 6.
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                            // 7.
+                            withAnimation {
+                               isActive = true
+                            }
+                        }
+                    }
         
     }
     
