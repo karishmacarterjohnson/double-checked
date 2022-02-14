@@ -17,16 +17,20 @@ struct NewItemField: View {
     
     var body: some View {
         HStack {
-            TextField("Add " + activityName + " Item", text: $itemTitle)
-                .textFieldStyle(.roundedBorder)
-            Spacer()
-            Button(action: {itemTitle = ""}) {
-                Label("", systemImage: "delete.left")
-            }.buttonStyle(PlainButtonStyle())
+            HStack {
+                TextField("Add " + activityName + " Item", text: $itemTitle)
+                    .modifier(TextFieldM())
+                Spacer()
+                Button(action: {itemTitle = ""}) {
+                    Label("", systemImage: "delete.left")
+                }
+                    .modifier(ClearButtonM())
+                    .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
+            }
             
             Button(action: addItem) {
                 Label("", systemImage: "plus")
-            }.buttonStyle(PlainButtonStyle())
+            }.modifier(AddButtonM())
         }.padding(.horizontal)
     }
     

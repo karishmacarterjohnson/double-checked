@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E1A1CA027BB126E00D37A4C /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1A1C9F27BB126E00D37A4C /* Modifiers.swift */; };
 		6E1C515627A0E0D10002CDBF /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E1C515427A0E0D10002CDBF /* Model.xcdatamodeld */; };
 		6E1C515D27A0E1FE0002CDBF /* Item+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1C515927A0E1FE0002CDBF /* Item+CoreDataClass.swift */; };
 		6E1C515E27A0E1FE0002CDBF /* Item+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1C515A27A0E1FE0002CDBF /* Item+CoreDataProperties.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6E1A1C9F27BB126E00D37A4C /* Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
 		6E1C515527A0E0D10002CDBF /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		6E1C515927A0E1FE0002CDBF /* Item+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Item+CoreDataClass.swift"; path = "double-checked/DataModel/Item+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		6E1C515A27A0E1FE0002CDBF /* Item+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Item+CoreDataProperties.swift"; path = "double-checked/DataModel/Item+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -146,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				6E623E8327A3424D00774BFB /* ProgressBar.swift */,
+				6E1A1C9F27BB126E00D37A4C /* Modifiers.swift */,
 				6E623E8627AB190300774BFB /* NewItemField.swift */,
 				6E623E8827AB213F00774BFB /* ActivityLinks.swift */,
 				6E9BE87C27ACCA730023E00C /* DeleteLinkButton.swift */,
@@ -241,6 +244,7 @@
 				6E623E8927AB213F00774BFB /* ActivityLinks.swift in Sources */,
 				6E3BC910279F5AAF0098A4F7 /* PersistenceController.swift in Sources */,
 				6E1C515E27A0E1FE0002CDBF /* Item+CoreDataProperties.swift in Sources */,
+				6E1A1CA027BB126E00D37A4C /* Modifiers.swift in Sources */,
 				6E623E9B27AB4E2000774BFB /* Activity+CoreDataProperties.swift in Sources */,
 				6E623E9327AB487800774BFB /* LinkItem+CoreDataProperties.swift in Sources */,
 				6E623E8727AB190600774BFB /* NewItemField.swift in Sources */,

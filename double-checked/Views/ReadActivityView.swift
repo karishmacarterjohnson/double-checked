@@ -30,11 +30,20 @@ struct ReadActivityView: View {
                 }
             }.padding(.horizontal).padding(.top)
             HStack {
-                TextField("Item title", text: $itemTitle)
-                    .textFieldStyle(.roundedBorder)
+                HStack {
+                    TextField("Item title", text: $itemTitle)
+                        .modifier(TextFieldM())
+                    Spacer()
+                    Button(action: {itemTitle = ""}) {
+                        Label("", systemImage: "delete.left")
+                    }
+                    .modifier(ClearButtonM())
+                    .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
+                    
+                }
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
-                }
+                }.modifier(AddButtonM())
             }.padding(.horizontal)
             ActivityLinks(activity: activity)
             
@@ -60,8 +69,8 @@ struct ReadActivityView: View {
                 
             }
         }
-            
-            .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
+        
+        .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
     }
     
     private func importActivity() {
@@ -150,7 +159,7 @@ struct ReadActivityView: View {
         return Float(Double(checkedCount) / Double(total))
     }
     
-
+    
     
     struct ReadActivityView_Previews: PreviewProvider {
         static var previews: some View {
