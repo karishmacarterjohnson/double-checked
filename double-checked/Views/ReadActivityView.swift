@@ -25,8 +25,11 @@ struct ReadActivityView: View {
                     }
                 }.pickerStyle(MenuPickerStyle())
                 Spacer()
+                HStack {
                 Button(action: importActivity) {
                     Label("", systemImage:"plus")
+                }.foregroundColor(Theme.lOrange)
+                //Spacer()
                 }
             }.padding(.horizontal).padding(.top)
             HStack {
@@ -40,10 +43,11 @@ struct ReadActivityView: View {
                     .modifier(ClearButtonM())
                     .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
                     
-                }
+                }.modifier(InputStackM())
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
                 }.modifier(AddButtonM())
+                    .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
             }.padding(.horizontal)
             ActivityLinks(activity: activity)
             
@@ -107,7 +111,7 @@ struct ReadActivityView: View {
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
-        activityTitles.append("Choose Activity")
+        activityTitles.append("Import Activity")
         for act in activitiesList {
             if (act.unwrappedTitle != activityTitle && act.itemsArray.count != 0) {
                 activityTitles.append(act.unwrappedTitle)

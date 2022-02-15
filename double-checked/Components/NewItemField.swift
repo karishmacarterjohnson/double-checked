@@ -26,11 +26,12 @@ struct NewItemField: View {
                 }
                     .modifier(ClearButtonM())
                     .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
-            }
+            }.modifier(InputStackM())
             
             Button(action: addItem) {
                 Label("", systemImage: "plus")
             }.modifier(AddButtonM())
+                .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
         }.padding(.horizontal)
     }
     

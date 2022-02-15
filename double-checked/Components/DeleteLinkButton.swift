@@ -22,6 +22,7 @@ struct DeleteLink: View {
                     }) {
                         Image(systemName: "xmark.circle")
                             .padding(1)
+                            .foregroundColor(Theme.lPink)
                     }
                 }
                 .padding(.top, 5)

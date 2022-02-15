@@ -54,8 +54,8 @@ struct UpdateActivityView: View {
             }
             
             Button(action: resetActivity) {
-                Label("Reset", systemImage: "")
-            }.padding(.horizontal)
+                Label("Reset Activity", systemImage: "")
+            }
             
         }
         

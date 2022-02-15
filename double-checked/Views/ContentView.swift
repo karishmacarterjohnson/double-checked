@@ -19,10 +19,6 @@ struct ContentView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Activity.date, ascending: true)], // https://www.donnywals.com/fetching-objects-from-core-data-in-a-swiftui-project/
         animation: .default)
     private var activities: FetchedResults<Activity>
-    
-    private var main1: Color = Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255)
-    private var main2: Color = Color(red: 255 / 255, green: 100 / 255, blue: 160 / 255)
-    private var main3: Color = Color(red: 255 / 255, green: 193 / 255, blue: 125 / 255)
     var body: some View {
         
         NavigationView{
@@ -92,29 +88,29 @@ struct ContentView: View {
                                 .modifier(ClearButtonM())
                                 .foregroundColor(activityTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
                             }
+                            .modifier(InputStackM())
                             Button(action: addActivity) {
                                 Label("", systemImage: "plus")
                             }.modifier(AddButtonM())
+                                .foregroundColor(activityTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
                         }.padding(4).padding(.horizontal)
                         
                         List {
                             ForEach(groupActivities(), id:\.self.0) {group, activitiesArray in
-                                Section(header: Text(group)
-                                            .foregroundColor(main1)
-                                            .font(.body)
-                                            .textCase(.uppercase)) {
+                                Section(header: Text(group).modifier(SectionHeaderM())) {
                                     ForEach(activitiesArray, id:\.self.title) {activity in
                                         NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
                                             VStack {
                                                 HStack (alignment: .firstTextBaseline) {
                                                     Text(activity.title ?? "")
+                                                        .modifier(ActivityTitleM())
                                                     Spacer()
                                                     Text(activity.unwrappedDate)
                                                         .fontWeight(.light)
                                                         .font(.caption)
+                                                        .modifier(ActivityDateM())
                                                     
-                                                }.foregroundColor(main1)
-                                                    .font(.body)
+                                                }
                                                 ProgressBar(value: progressValue(activity: activity)).frame(height:4)
                                             }
                                             
@@ -138,8 +134,8 @@ struct ContentView: View {
                         
                     }.navigationBarTitle("Activities", displayMode: .inline)
                     
-                        .background(main3)
-                        .foregroundColor(main1)
+                        .background(Theme.lOrange)
+                        .foregroundColor(Theme.dPink)
                         .foregroundColor(Color(UIColor.white))
                         .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {
                             Text(
@@ -154,7 +150,7 @@ struct ContentView: View {
                 Text("Double Check")
             }
             
-        }.foregroundColor(main1)
+        }.foregroundColor(Theme.lOrange)
             .onOpenURL(perform: {url in
                 newImport = importActivityAsObject(link: url.absoluteString)
                 if newImport != nil {

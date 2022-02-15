@@ -23,11 +23,20 @@ struct ActivityLinks: View {
             HStack {
                 if showTextField {
                     HStack {
+                        HStack {
                         TextField("add link", text: $itemLink)
-                            .textFieldStyle(.roundedBorder)
+                            .modifier(TextFieldM())
+                        Button(action: {itemLink = ""}) {
+                            Label("", systemImage: "delete.left")
+                        }
+                        .modifier(ClearButtonM())
+                        .foregroundColor(itemLink.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
+                        }
+                        .modifier(InputStackM())
                         Button(action: addLinkItem) {
                             Label("", systemImage:"plus")
-                        }
+                        }.modifier(AddButtonM())
+                            .foregroundColor(itemLink.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
                     }
                     .alert(isPresented: $showingAlert) {
                         Alert(
@@ -42,6 +51,7 @@ struct ActivityLinks: View {
                     Button(action: {showTextField.toggle()}) {
                         Image(systemName: "plus")
                             .font(.largeTitle)
+                            .foregroundColor(Theme.lPink)
                     }
                 }
                 ForEach(activity.linkItemsArray) { linkitem in
@@ -53,12 +63,16 @@ struct ActivityLinks: View {
                                 Text(linkitem.unwrappedLink)
                                     .font(.caption)
                             }.frame(maxWidth: 160)
+                                .foregroundColor(Theme.dOrange)
                             Image(systemName: "link.circle.fill")
                                 .font(.largeTitle)
+                                .foregroundColor(Theme.lOrange)
                         }
                         DeleteLink(activity: activity, link: linkitem)
                     }// .background(Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255))
+                    
                 }.padding()
+                    
             }
         }.frame(height: 100).padding(.horizontal)
     }
