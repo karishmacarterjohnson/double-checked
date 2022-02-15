@@ -16,13 +16,12 @@ struct DeleteLink: View {
     var body: some View {
             VStack {
                 HStack {
-                    Spacer()
                     Button(action: {
                         deleteLinkItem(linkItem: link)
                     }) {
                         Image(systemName: "xmark.circle")
-                            .padding(1)
-                            .foregroundColor(Theme.lPink)
+//                            .padding(1)
+                            .modifier(deleteLinkM())
                     }
                 }
                 .padding(.top, 5)

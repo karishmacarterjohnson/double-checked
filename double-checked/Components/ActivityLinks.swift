@@ -48,10 +48,10 @@ struct ActivityLinks: View {
                     .frame(maxWidth: 160)
                     //.frame(maxWidth: UIScreen.main.bounds.size.width)
                 } else {
-                    Button(action: {showTextField.toggle()}) {
+                    Button(action: {withAnimation {showTextField.toggle()}}) {
                         Image(systemName: "plus")
                             .font(.largeTitle)
-                            .foregroundColor(Theme.lPink)
+                            .foregroundColor(Theme.lgrey)
                     }
                 }
                 ForEach(activity.linkItemsArray) { linkitem in
@@ -63,24 +63,32 @@ struct ActivityLinks: View {
                                 Text(linkitem.unwrappedLink)
                                     .font(.caption)
                             }.frame(maxWidth: 160)
-                                .foregroundColor(Theme.dOrange)
+                                .modifier(linkInfoM())
+                                
                             Image(systemName: "link.circle.fill")
                                 .font(.largeTitle)
-                                .foregroundColor(Theme.lOrange)
-                        }
+                                .modifier(linkChainM())
+                        }.padding()
+                            .background(.white)
+                            .cornerRadius(16)
                         DeleteLink(activity: activity, link: linkitem)
                     }// .background(Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255))
                     
-                }.padding()
+                }
+                    
                     
             }
-        }.frame(height: 100).padding(.horizontal)
+        }.frame(height: 35).padding()
     }
     
     
     
     private func addLinkItem() {
         withAnimation {
+            if itemLink.isEmpty {
+                showTextField = false
+                return
+            }
             if let url = URL(string: itemLink ) {
                 let newLinkItem = LinkItem(context: viewContext)
                 newLinkItem.link = itemLink

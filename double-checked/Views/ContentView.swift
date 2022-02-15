@@ -40,8 +40,10 @@ struct ContentView: View {
                                                     Text(linkitem.unwrappedLink)
                                                         .font(.caption)
                                                 }.frame(maxWidth: 160)
+                                                    .modifier(linkInfoM())
                                                 Image(systemName: "link.circle.fill")
                                                     .font(.largeTitle)
+                                                    .modifier(linkChainM())
                                             }
                                             
                                         }
@@ -52,12 +54,12 @@ struct ContentView: View {
                         
                         List {
                             ForEach(groupItems(), id:\.self.0){ activityName, items in
-                                Section(header: Text(activityName ?? "")){
+                                Section(header: Text(activityName ?? "").modifier(SectionHeaderM())){
                                     ForEach(items) { item in
                                         Text(item.unwrappedTitle)
                                     }
                                 }
-                            }
+                            }.modifier(ListRowM())
                         }
                         HStack {
                             Button(action: {prevActivity = false}) {
@@ -69,7 +71,7 @@ struct ContentView: View {
                                 
                                 
                             }) {Label("Close", systemImage:"")}
-                        }
+                        }.padding()
                     }.navigationBarTitle(newImport!.unwrappedTitle)
                     
                     ////////////////////////////////////////// import
@@ -79,7 +81,7 @@ struct ContentView: View {
                     VStack {
                         HStack {
                             HStack {
-                                TextField("Activity Name", text: $activityTitle)
+                                TextField("New Activity", text: $activityTitle)
                                     .modifier(TextFieldM())
                                 Spacer()
                                 Button(action: {activityTitle = ""}) {
@@ -126,22 +128,26 @@ struct ContentView: View {
                                             }
                                         }
                                         .listRowSeparator(.hidden)
-                                    }
+                                    }.listRowBackground(Theme.rowBackground)
                                 }
                             }
                         }.listStyle(SidebarListStyle())
                         
                         
-                    }.navigationBarTitle("Activities", displayMode: .inline)
-                    
-                        .background(Theme.lOrange)
-                        .foregroundColor(Theme.dPink)
-                        .foregroundColor(Color(UIColor.white))
+                    }.modifier(navBarM())
+                        .toolbar {
+                            ToolbarItem(placement: .principal) {
+                                HStack {
+                                    Text("Double Check").foregroundColor(Theme.dclay)
+                                    
+                                }
+                                
+                            }
+                        }
                         .navigationBarItems(trailing: NavigationLink(destination: SearchBar(activities: activities)) {
                             Text(
-                                Image("search")
+                                Image("search-lgrey")
                             )
-                            
                         }
                         )
                     /////////////////////////////////////// default
@@ -150,7 +156,7 @@ struct ContentView: View {
                 Text("Double Check")
             }
             
-        }.foregroundColor(Theme.lOrange)
+        }.foregroundColor(Theme.greeny)
             .onOpenURL(perform: {url in
                 newImport = importActivityAsObject(link: url.absoluteString)
                 if newImport != nil {

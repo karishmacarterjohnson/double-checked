@@ -18,7 +18,7 @@ struct NewItemField: View {
     var body: some View {
         HStack {
             HStack {
-                TextField("Add " + activityName + " Item", text: $itemTitle)
+                TextField("New " + activityName + " Item", text: $itemTitle)
                     .modifier(TextFieldM())
                 Spacer()
                 Button(action: {itemTitle = ""}) {

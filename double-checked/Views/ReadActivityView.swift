@@ -18,25 +18,12 @@ struct ReadActivityView: View {
     var body: some View {
         VStack {
             ProgressBar(value: progressValue(activity: activity)).frame(height:10).padding(.horizontal)
-            HStack {
-                Picker("Activity", selection: $selectedActivity) {
-                    ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
-                        Text(act)
-                    }
-                }.pickerStyle(MenuPickerStyle())
-                Spacer()
-                HStack {
-                Button(action: importActivity) {
-                    Label("", systemImage:"plus")
-                }.foregroundColor(Theme.lOrange)
-                //Spacer()
-                }
-            }.padding(.horizontal).padding(.top)
+            HStack (alignment: .firstTextBaseline) {
+            
             HStack {
                 HStack {
-                    TextField("Item title", text: $itemTitle)
+                    TextField("New Item", text: $itemTitle)
                         .modifier(TextFieldM())
-                    Spacer()
                     Button(action: {itemTitle = ""}) {
                         Label("", systemImage: "delete.left")
                     }
@@ -47,20 +34,34 @@ struct ReadActivityView: View {
                 Button(action: addItem) {
                     Label("", systemImage: "plus")
                 }.modifier(AddButtonM())
-                    .foregroundColor(itemTitle.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
-            }.padding(.horizontal)
+                    .foregroundColor(selectedActivity.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
+            }
+                HStack {
+                    Picker("Activity", selection: $selectedActivity) {
+                        ForEach(getActivityTitles(activitiesList: activityArray, activityTitle: activity.unwrappedTitle), id:\.self) { act in
+                            Text(act)
+                        }
+                    }.pickerStyle(MenuPickerStyle())
+                    HStack {
+                    Button(action: importActivity) {
+                        Label("", systemImage:"plus")
+                    }.modifier(plusButtonM())
+//                            .foregroundColor((selectedActivity != "") ? Theme.emptyButtonColor : Theme.filledButtonColor)
+                    }
+                }
+            }.padding(6)
             ActivityLinks(activity: activity)
             
             List {
                 ForEach(groupItems(), id:\.self.0){ activityName, items in
-                    Section(header: Text(activityName ?? "")){
+                    Section(header: Text(activityName ?? "").modifier(SectionHeaderM())){
                         ForEach(items) { item in
                             Checked(activity:activity, item: item)
                         }
                         NewItemField(activity: activity, activityName: activityName!)
                     }
                     
-                }
+                }.listRowBackground(Theme.rowBackground)
             }
             
         }
@@ -72,9 +73,9 @@ struct ReadActivityView: View {
                 }
                 
             }
-        }
+        }.background(Theme.coffee)
         
-        .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))})
+            .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))}).foregroundColor(Theme.dclay)
     }
     
     private func importActivity() {
@@ -111,7 +112,7 @@ struct ReadActivityView: View {
     
     private func getActivityTitles(activitiesList:FetchedResults<Activity>, activityTitle: String) -> [String] {
         var activityTitles = [String]()
-        activityTitles.append("Import Activity")
+        activityTitles.append("Import")
         for act in activitiesList {
             if (act.unwrappedTitle != activityTitle && act.itemsArray.count != 0) {
                 activityTitles.append(act.unwrappedTitle)

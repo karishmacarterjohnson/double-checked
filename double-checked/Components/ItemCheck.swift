@@ -23,11 +23,10 @@ struct Checked: View {
                 Button(action: {toggleCheck(item: item)}) {
                     Label("", systemImage: "checkmark.square")
                 }
-                .foregroundColor(Theme.lPink)
                 Text(item.unwrappedTitle).strikethrough()
-                    .foregroundColor(Theme.lOrange)
+                    
                 
-            }
+            }.modifier(listRowsM())
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button( action: {deleteItem(item:item)}) {
                     Label("", systemImage: "trash")
@@ -38,11 +37,9 @@ struct Checked: View {
             HStack {
                 Button(action: {toggleCheck(item: item)}) {
                     Label("", systemImage: "square")
-                        .foregroundColor(Theme.lPink)
                 }
                 Text(item.unwrappedTitle)
-                    .foregroundColor(Theme.lOrange)
-            }
+            }.modifier(listRowsM())
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button( action: {deleteItem(item:item)}) {
                     Label("", systemImage: "trash")

@@ -13,7 +13,7 @@ struct SearchBar: View {
     
     var body: some View {
         
-        NavigationView {
+//        NavigationView {
             List {
                 ForEach(searchResults(), id: \.self.0) { index, activity, match in
                     NavigationLink(destination: ReadActivityView(activity: activity, activityArray: activities)) {
@@ -26,7 +26,8 @@ struct SearchBar: View {
                 }
             }
             
-        }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+        //}
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
         
     }
     

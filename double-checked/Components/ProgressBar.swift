@@ -14,12 +14,14 @@ struct ProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                Rectangle().frame(width: geometry.size.width , height: geometry.size.height)
-                    .opacity(  1.0)
-                    .foregroundColor(Theme.lPink)
+                Rectangle()
+                    .frame(width: geometry.size.width , height: geometry.size.height)
+
+                    .modifier(Progress0M())
                 withAnimation {
-                Rectangle().frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
-                        .foregroundColor(Theme.lOrange)
+                Rectangle()
+                    .frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
+                    .modifier(Progress1M())
                 }
             }.cornerRadius(45.0)
         }
