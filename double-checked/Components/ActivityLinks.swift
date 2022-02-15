@@ -58,6 +58,9 @@ struct ActivityLinks: View {
                     
                     Link(destination: URL(string: linkitem.unwrappedLink)!) {
                         HStack {
+                            Image(systemName: "link.circle.fill")
+                                .font(.largeTitle)
+                                .modifier(linkChainM())
                             VStack(alignment: .leading) {
                                 Text(linkitem.unwrappedTitle)
                                 Text(linkitem.unwrappedLink)
@@ -65,20 +68,19 @@ struct ActivityLinks: View {
                             }.frame(maxWidth: 160)
                                 .modifier(linkInfoM())
                                 
-                            Image(systemName: "link.circle.fill")
-                                .font(.largeTitle)
-                                .modifier(linkChainM())
-                        }.padding()
-                            .background(.white)
-                            .cornerRadius(16)
-                        DeleteLink(activity: activity, link: linkitem)
-                    }// .background(Color(red: 214 / 255, green: 41 / 255, blue: 0 / 255))
+                            
+                            
+                        }.padding(.leading).padding(.vertical)
+                            
+                        DeleteLink(activity: activity, link: linkitem).padding(.trailing,4).padding(.top,4)
+                    }.background(.white)
+                        .cornerRadius(16)
                     
                 }
                     
                     
             }
-        }.frame(height: 35).padding()
+        }.frame(height: 45).padding()
     }
     
     

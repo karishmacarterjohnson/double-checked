@@ -24,7 +24,6 @@ struct DeleteLink: View {
                             .modifier(deleteLinkM())
                     }
                 }
-                .padding(.top, 5)
                 Spacer()
             }
         }
