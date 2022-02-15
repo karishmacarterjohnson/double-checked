@@ -7,7 +7,7 @@
 ## Installation
 
 1. Clone the double-checked repository.
-2. Install XCode. Xcode is a complete developer toolset for creating apps for Mac, iPhone, iPad, Apple Watch, and Apple TV. Changes to the app must be done in Xcode. The current release of Xcode is available as a free download from the Mac App Store. 
+2. Install XCode. Xcode is a complete developer toolset for creating apps for Mac, iPhone, iPad, Apple Watch, and Apple TV. XCode is available as a free download from the Mac App Store. 
 3. Launch app through the simulator.
 
 ## Dependencies
