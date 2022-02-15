@@ -154,16 +154,18 @@ struct ContentView: View {
                 }}
             else {
                 Text("Double Check")
+                    .foregroundColor(Theme.dclay)
             }
             
-        }.foregroundColor(Theme.greeny)
+        }.accentColor(Theme.dclay)
+        .foregroundColor(Theme.greeny)
             .onOpenURL(perform: {url in
                 newImport = importActivityAsObject(link: url.absoluteString)
                 if newImport != nil {
                     prevActivity = true
                 }
-            }).alert("invalid url", isPresented: $invalidLink) {
-                Button("ok", role:.cancel, action: {invalidLink = false})
+            }).alert("Invalid URL 🥺", isPresented: $invalidLink) {
+                Button("It's ok.", role:.cancel, action: {invalidLink = false})
             }
             .onAppear {
                 // 6.

@@ -42,11 +42,12 @@ struct ReadActivityView: View {
                             Text(act)
                         }
                     }.pickerStyle(MenuPickerStyle())
+                        //.background(Theme.lgrey)
                     HStack {
                     Button(action: importActivity) {
                         Label("", systemImage:"plus")
                     }.modifier(plusButtonM())
-//                            .foregroundColor((selectedActivity != "") ? Theme.emptyButtonColor : Theme.filledButtonColor)
+                            .foregroundColor(selectedActivity.isEmpty ? Theme.emptyButtonColor : Theme.filledButtonColor)
                     }
                 }
             }.padding(6)
@@ -75,7 +76,7 @@ struct ReadActivityView: View {
             }
         }.background(Theme.coffee)
         
-            .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity)) {Text(Image(systemName: "chevron.forward"))}).foregroundColor(Theme.dclay)
+            .navigationBarItems(trailing: NavigationLink(destination: UpdateActivityView(activity: activity))  {Text(Image(systemName: "chevron.forward"))}).foregroundColor(Theme.dclay) //chevron.forward // gear
     }
     
     private func importActivity() {

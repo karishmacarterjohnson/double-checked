@@ -41,8 +41,8 @@ struct ActivityLinks: View {
                     .alert(isPresented: $showingAlert) {
                         Alert(
                             title: Text("Error"),
-                            message: Text("Invalid url. Try adding 'http://' to the beginning if you think this is a mistake."),
-                            dismissButton: .default(Text("ok"))
+                            message: Text("Invalid URL. Try adding 'http://' to the beginning if you think this is a mistake."),
+                            dismissButton: .default(Text("Ok!"))
                         )
                     }
                     .frame(maxWidth: 160)

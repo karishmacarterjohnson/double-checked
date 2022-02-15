@@ -19,7 +19,7 @@ struct ShareActivity: View {
     var body: some View {
         Button(action: {UIPasteboard.general.string = createShare()}) {
             Label("", systemImage: "square.and.arrow.up")
-        }.alert("Link Copied", isPresented: $linkCopied) {
+        }.alert("Link Copied! 🥰", isPresented: $linkCopied) {
             Button("thank you", role:.cancel, action: {linkCopied = false})
         }
         

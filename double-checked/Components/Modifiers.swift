@@ -136,6 +136,7 @@ struct navBarM: ViewModifier {
             .navigationBarTitle("Activities", displayMode: .inline)
             .background(Theme.coffee)
             .foregroundColor(Theme.lgrey)
+            
         
     }
 }
